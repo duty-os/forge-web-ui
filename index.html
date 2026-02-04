@@ -24,27 +24,45 @@
             margin-bottom: 30px;
             color: #333;
         }
+
+        :root {
+            --forge-menu-pop-gap: 12px;
+        }
     </style>
 </head>
 <body>
 <h1>Forge Web UI - Toolbar Demo</h1>
 
-<forge-toolbar direction="vertical" select="laser">
-    <forge-toolbar-icon tag="laser" url="/assets/laser.svg"></forge-toolbar-icon>
-    <forge-toolbar-icon tag="selector" url="/assets/selector.svg"></forge-toolbar-icon>
-    <forge-toolbar-menu tag="curve" url="/assets/pencil.svg" active-url="/assets/pencil_hovered.svg" align="right">
+<forge-toolbar id="toolbar" direction="vertical" tool="laser">
+    <forge-toolbar-icon action="tool.laser" icon="/assets/laser.svg"></forge-toolbar-icon>
+    <forge-toolbar-icon action="tool.selector" icon="/assets/selector.svg"></forge-toolbar-icon>
+    <forge-toolbar-menu action="tool.curve" align="right">
+        <forge-toolbar-icon match="*" menu-tag="pencil" icon="/assets/pencil.svg" active-icon="/assets/pencil_hovered.svg"></forge-toolbar-icon>
         <forge-toolbar-grid>
             <forge-toolbar-grid-row>
-                <forge-toolbar-icon url="/assets/pencil.svg"
-                                    active-url="/assets/pencil_hovered.svg"></forge-toolbar-icon>
-                <forge-toolbar-icon url="/assets/laser.svg"></forge-toolbar-icon>
+                <forge-toolbar-icon icon="/assets/pencil.svg"
+                                    active-icon="/assets/pencil_hovered.svg"></forge-toolbar-icon>
+                <forge-toolbar-icon icon="/assets/laser.svg"></forge-toolbar-icon>
             </forge-toolbar-grid-row>
             <forge-toolbar-grid-row>
-                <forge-toolbar-icon url="/assets/laser.svg"></forge-toolbar-icon>
-                <forge-toolbar-icon url="/assets/pencil.svg"></forge-toolbar-icon>
+                <forge-toolbar-icon icon="/assets/laser.svg"></forge-toolbar-icon>
+                <forge-toolbar-icon icon="/assets/pencil.svg"></forge-toolbar-icon>
             </forge-toolbar-grid-row>
         </forge-toolbar-grid>
     </forge-toolbar-menu>
+<!--    <forge-toolbar-menu tag="shape"  align="right">-->
+<!--        <forge-toolbar-grid>-->
+<!--            <forge-toolbar-grid-row>-->
+<!--                <forge-toolbar-icon icon="/assets/pencil.svg"-->
+<!--                                    active-icon="/assets/pencil_hovered.svg"></forge-toolbar-icon>-->
+<!--                <forge-toolbar-icon icon="/assets/laser.svg"></forge-toolbar-icon>-->
+<!--            </forge-toolbar-grid-row>-->
+<!--            <forge-toolbar-grid-row>-->
+<!--                <forge-toolbar-icon icon="/assets/laser.svg"></forge-toolbar-icon>-->
+<!--                <forge-toolbar-icon icon="/assets/pencil.svg"></forge-toolbar-icon>-->
+<!--            </forge-toolbar-grid-row>-->
+<!--        </forge-toolbar-grid>-->
+<!--    </forge-toolbar-menu>-->
 </forge-toolbar>
 
 <script type="module" src="/src/main.ts"></script>

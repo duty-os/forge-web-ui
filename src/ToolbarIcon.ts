@@ -1,41 +1,30 @@
+import {Toolbar} from "./Toolbar.ts";
+
 class ToolbarIcon extends HTMLElement {
-    private readonly shadow: ShadowRoot;
-    private readonly imgElement: HTMLImageElement;
-    private _isActive: boolean = false;
+
+    public readonly rootElement: HTMLImageElement;
+
+    private get toolbar(): Toolbar | null {
+        return this.closest('forge-toolbar') as Toolbar | null;
+    }
+
+    private get _isActive(): boolean {
+        if (!this.toolbar) { return false; }
+        const tool = this.toolbar.getAttribute("tool");
+        if (tool && this.getAttribute("action") === `tool.${tool}`) {
+            return true;
+        }
+        return false;
+    }
 
     static get observedAttributes() {
-        return ['url', 'active-url'];
+        return ['icon', 'active-icon', 'action'];
     }
 
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open' });
-
-        // Add default styles
-        const style = document.createElement('style');
-        style.textContent = `
-            :host {
-                display: inline-block;
-                width: 34px;
-                height: 34px;
-                cursor: pointer;
-                border-radius: 4px;
-                transition: background-color 0.2s;
-                box-sizing: border-box;
-            }
-
-            :host([selected]) {
-                background-color: #e0e7ff;
-            }
-        `;
-
-        this.imgElement = document.createElement('img');
-        this.imgElement.style.width = '100%';
-        this.imgElement.style.height = '100%';
-        this.imgElement.style.objectFit = 'contain';
-
-        this.shadow.appendChild(style);
-        this.shadow.appendChild(this.imgElement);
+        this.rootElement = document.createElement('img');
+        this.rootElement.classList.add("toolbar-icon");
     }
 
     connectedCallback() {
@@ -48,26 +37,18 @@ class ToolbarIcon extends HTMLElement {
         }
     }
 
-    private updateImage() {
-        const url = this.getAttribute('url');
-        const activeUrl = this.getAttribute('active-url');
+    public updateImage() {
 
-        if (this._isActive && activeUrl) {
-            this.imgElement.src = activeUrl;
+        const url = this.getAttribute('icon');
+        const activeUrl = this.getAttribute('active-icon');
+
+        if (this._isActive) {
+            this.rootElement.src = activeUrl ?? (url ?? '');
+            this.rootElement.setAttribute("data-active", "true");
         } else if (url) {
-            this.imgElement.src = url;
+            this.rootElement.setAttribute("data-active", "false");
+            this.rootElement.src = url;
         }
-    }
-
-    setActive(isActive: boolean): void {
-        if (this._isActive !== isActive) {
-            this._isActive = isActive;
-            this.updateImage();
-        }
-    }
-
-    get isActive(): boolean {
-        return this._isActive;
     }
 }
 

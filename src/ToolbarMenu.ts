@@ -1,293 +1,105 @@
-import {ToolbarIcon} from "./ToolbarIcon.ts";
+import type { ToolbarIcon } from "./ToolbarIcon.ts";
 
 class ToolbarGridRow extends HTMLElement {
-    private readonly shadow: ShadowRoot;
-    private readonly container: HTMLDivElement;
+    public readonly rootElement: HTMLDivElement;
 
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open' });
-
-        const style = document.createElement('style');
-        style.textContent = `
-            :host {
-                display: flex;
-                gap: 8px;
-            }
-        `;
-
-        this.container = document.createElement('div');
-        this.container.style.display = 'flex';
-        this.container.style.gap = '8px';
-
-        this.shadow.appendChild(style);
-        this.shadow.appendChild(this.container);
+        this.rootElement = document.createElement('div');
+        this.rootElement.classList.add("menu-grid-row");
     }
 
     connectedCallback() {
-        // Move children to shadow DOM
-        const children = Array.from(this.children);
-        children.forEach(child => {
-            if (child.tagName === 'FORGE-TOOLBAR-ICON') {
-                this.container.appendChild(child);
-            } else {
-                console.warn('forge-toolbar-grid-row only accepts forge-toolbar-icon as direct child');
+        this.handleChildrenUpdate();
+    }
+
+    private handleChildrenUpdate() {
+        this.rootElement.replaceChildren();
+        for (const child of Array.from(this.children)) {
+            if (child.tagName.toLowerCase() === "forge-toolbar-icon") {
+                this.rootElement.appendChild((child as ToolbarIcon).rootElement);
             }
-        });
+        }
     }
 }
 
 class ToolbarGrid extends HTMLElement {
-    private readonly shadow: ShadowRoot;
-    private readonly container: HTMLDivElement;
-
+    public readonly rootElement: HTMLDivElement;
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open' });
-
-        const style = document.createElement('style');
-        style.textContent = `
-            :host {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-        `;
-
-        this.container = document.createElement('div');
-        this.container.style.display = 'flex';
-        this.container.style.flexDirection = 'column';
-        this.container.style.gap = '8px';
-
-        this.shadow.appendChild(style);
-        this.shadow.appendChild(this.container);
+        this.rootElement = document.createElement('div');
+        this.rootElement.classList.add("menu-grid");
     }
 
     connectedCallback() {
-        // Move children to shadow DOM
-        const children = Array.from(this.children);
-        children.forEach(child => {
-            if (child instanceof ToolbarGridRow) {
-                this.container.appendChild(child);
-            } else {
-                console.warn('forge-toolbar-grid only accepts forge-toolbar-grid-row as direct child');
+        this.handleChildrenUpdate();
+    }
+
+    private handleChildrenUpdate() {
+        this.rootElement.replaceChildren();
+        for (const child of Array.from(this.children)) {
+            if (child.tagName.toLowerCase() === "forge-toolbar-grid-row") {
+                this.rootElement.appendChild((child as ToolbarGridRow).rootElement);
             }
-        });
+        }
     }
 }
 
 class ToolbarMenu extends HTMLElement {
-    private readonly shadow: ShadowRoot;
-    private readonly toolbarIcon: ToolbarIcon;
+
     private menuGrid: ToolbarGrid | null = null;
-    private _isOpen: boolean = false;
-    private _align: 'right' | 'left' | 'top' | 'bottom' = 'right';
-    private parentToolbar: any = null;
+    public readonly rootElement: HTMLDivElement;
 
     static get observedAttributes() {
-        return ['url', 'active-url', 'align', 'tag'];
+        return ['align'];
     }
 
     constructor() {
         super();
-        this.shadow = this.attachShadow({ mode: 'open' });
-
-        // Style for the menu component
-        const style = document.createElement('style');
-        style.textContent = `
-            :host {
-                position: relative;
-                display: inline-block;
-            }
-
-            forge-toolbar-grid {
-                position: absolute;
-                left: 0;
-                top: 0;
-                display: none;
-                background: white;
-                padding: 12px;
-                border-radius: 8px;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-                z-index: 1000;
-            }
-
-            forge-toolbar-grid.open {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            forge-toolbar-grid-row {
-                display: flex;
-                gap: 8px;
-            }
-        `;
-
-        // Create a ToolbarIcon for displaying the menu icon
-        this.toolbarIcon = document.createElement('forge-toolbar-icon') as ToolbarIcon;
-        this.shadow.appendChild(style);
-        this.shadow.appendChild(this.toolbarIcon);
-
-        // Click outside to close
-        document.addEventListener('click', (e) => {
-            if (this._isOpen && !this.contains(e.target as Node)) {
-                this.close();
-            }
-        });
-
-        // Toggle menu on icon click
-        this.toolbarIcon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggle();
-        });
+        this.rootElement = document.createElement("div");
+        this.rootElement.classList.add("menu-container");
+        this.rootElement.addEventListener("click", this.toggle);
     }
 
+    private toggle = () => {
+        if (this.menuGrid) {
+            if (this.menuGrid.rootElement.classList.contains("menu-grid-open")) {
+                this.menuGrid.rootElement.classList.remove("menu-grid-open");
+            } else {
+                this.menuGrid.rootElement.classList.add("menu-grid-open");
+            }
+        }
+    };
+
     connectedCallback() {
-        this.updateIcon();
-        this.updateMenuContent();
-        this.updateAlign();
-        this.updateSelection();
+        this.handleChildrenUpdate();
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (oldValue === newValue) return;
-
-        if (name === 'url' || name === 'active-url') {
-            this.updateIcon();
-        } else if (name === 'align') {
-            this.updateAlign();
-        } else if (name === 'tag') {
-            this.updateSelection();
-        }
-    }
-
-    private updateIcon() {
-        const url = this.getAttribute('url');
-        const activeUrl = this.getAttribute('active-url');
-
-        if (url) this.toolbarIcon.setAttribute('url', url);
-        if (activeUrl) this.toolbarIcon.setAttribute('active-url', activeUrl);
-
-        // Set active state based on menu open state
-        this.toolbarIcon.setActive(this._isOpen);
-    }
-
-    private updateMenuContent() {
-        const children = Array.from(this.children);
-
-        let gridAdded = false;
-        children.forEach(child => {
-            // Only allow one ToolbarGrid as the root element
-            if (child instanceof ToolbarGrid) {
-                if (!gridAdded) {
-                    this.menuGrid = child;
-                    this.shadowRoot?.appendChild(child);
-                    gridAdded = true;
-                } else {
-                    console.warn('forge-toolbar-menu only accepts one forge-toolbar-grid element');
-                }
-            } else {
-                console.warn('forge-toolbar-menu only accepts forge-toolbar-grid as direct child');
-            }
-        });
-    }
-
-    private updateSelection() {
-        // Get select from parent toolbar
-        const selectedTag = this.parentToolbar?.getAttribute('select');
-        const menuTag = this.getAttribute('tag');
-
-        // Update the internal toolbarIcon based on select and tag match
-        if (selectedTag && menuTag === selectedTag) {
-            this.toolbarIcon.setAttribute('selected', '');
-        } else {
-            this.toolbarIcon.removeAttribute('selected');
-        }
-    }
-
-    // Method to set parent toolbar reference
-    setParentToolbar(toolbar: any): void {
-        this.parentToolbar = toolbar;
-    }
-
-    close() {
-        this._isOpen = false;
-        this.menuGrid?.classList.remove('open');
-        this.updateIcon();
-    }
-
-    private updateAlign() {
-        const align = this.getAttribute('align');
-        if (align && ['right', 'left', 'top', 'bottom'].includes(align)) {
-            this._align = align as 'right' | 'left' | 'top' | 'bottom';
-        } else {
-            this._align = 'right';
-        }
-    }
-
-    private calculatePosition(): { transform: string } {
-        if (!this.menuGrid) {
-            return { transform: 'translate(0, 0)' };
-        }
-
-        const gap = 8;
-
-        const hostRect = this.getBoundingClientRect();
-        const menuRect = this.menuGrid.getBoundingClientRect();
-
-        let x = 0;
-        let y = 0;
-
-        switch (this._align) {
-            case 'right':
-                x = hostRect.width + gap;
-                y = (hostRect.height - menuRect.height) / 2;
-                break;
-            case 'left':
-                x = -gap - menuRect.width;
-                y = (hostRect.height - menuRect.height) / 2;
-                break;
-            case 'top':
-                x = (hostRect.width - menuRect.width) / 2;
-                y = -gap - menuRect.height;
-                break;
-            case 'bottom':
-                x = (hostRect.width - menuRect.width) / 2;
-                y = hostRect.height + gap;
-                break;
-        }
-
-        return { transform: `translate(${x}px, ${y}px)` };
-    }
-
-    toggle() {
-        if (this._isOpen) {
-            this.close();
-        } else {
-            this.open();
-        }
-    }
-
-    open() {
-        this._isOpen = true;
-        this.updateMenuContent();
-
-        // First, make menu visible but positioned off-screen
-        if (this.menuGrid) {
-            this.menuGrid.classList.add('open');
-            this.menuGrid.style.visibility = 'hidden';
-        }
-
-        requestAnimationFrame(() => {
+        if (name === 'align') {
             if (this.menuGrid) {
-                const position = this.calculatePosition();
-                this.menuGrid.style.transform = position.transform;
-                this.menuGrid.style.visibility = 'visible';
+                this.menuGrid.rootElement.setAttribute("data-align", newValue);
             }
-        });
+        }
+    }
 
-        this.updateIcon();
+    private handleChildrenUpdate() {
+        this.rootElement.replaceChildren();
+        let isGridAdded = false;
+        for (const child of Array.from(this.children)) {
+            if (child.tagName.toLowerCase() === "forge-toolbar-icon") {
+                this.rootElement.appendChild((child as ToolbarIcon).rootElement);
+            }
+            if (child.tagName.toLowerCase() === "forge-toolbar-grid") {
+                if (isGridAdded) {
+                    console.warn("Multiple <forge-toolbar-grid> elements found inside <forge-toolbar-menu>. Only the first one will be used.");
+                    continue;
+                }
+                isGridAdded = true;
+                this.rootElement.appendChild((child as ToolbarGrid).rootElement);
+            }
+        }
     }
 }
 
