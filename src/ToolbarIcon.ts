@@ -1,31 +1,46 @@
-import {Toolbar} from "./Toolbar.ts";
+import type { Toolbar } from "./Toolbar.ts";
+import {forgeElementReady} from "./utils.ts";
 
 class ToolbarIcon extends HTMLElement {
 
-    public readonly rootElement: HTMLImageElement;
+    public readonly rootElement: HTMLDivElement;
 
     private get toolbar(): Toolbar | null {
-        return this.closest('forge-toolbar') as Toolbar | null;
+        return this.closest('forge-toolbar') as Toolbar;
     }
 
     private get _isActive(): boolean {
         if (!this.toolbar) { return false; }
-        const tool = this.toolbar.getAttribute("tool");
-        if (tool && this.getAttribute("action") === `tool.${tool}`) {
-            return true;
+        const match = this.getAttribute("match") || this.getAttribute("action");
+        const predicates = match ? match.split(",").map(s => s.trim()) : [];
+        if (predicates.length === 0) {
+            return false;
         }
-        return false;
+        return predicates.every(predicate => {
+            const [attr, value] = predicate.split(".");
+            return this.toolbar!.getAttribute(attr) === value;
+        });
     }
 
     static get observedAttributes() {
-        return ['icon', 'active-icon', 'action'];
+        return ['icon', 'action'];
     }
 
     constructor() {
         super();
-        this.rootElement = document.createElement('img');
+        this.rootElement = document.createElement('div');
         this.rootElement.classList.add("toolbar-icon");
+        this.rootElement.addEventListener("click", this.handleClick);
     }
+
+    private  handleClick = (e: PointerEvent) => {
+        const action = this.getAttribute("action");
+        if (action) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("Icon clicked:", this.getAttribute("action"));
+        }
+    };
 
     connectedCallback() {
         this.updateImage();
@@ -38,22 +53,37 @@ class ToolbarIcon extends HTMLElement {
     }
 
     public updateImage() {
+        forgeElementReady().then(() => {
+            const assetName = this.getAttribute('icon');
+            if (!this.toolbar || !assetName) {
+                return;
+            }
+            const {regular, active} = this.toolbar.getAssetByName(assetName);
 
-        const url = this.getAttribute('icon');
-        const activeUrl = this.getAttribute('active-icon');
-
-        if (this._isActive) {
-            this.rootElement.src = activeUrl ?? (url ?? '');
-            this.rootElement.setAttribute("data-active", "true");
-        } else if (url) {
-            this.rootElement.setAttribute("data-active", "false");
-            this.rootElement.src = url;
-        }
+            if (this._isActive) {
+                if (active) {
+                    this.rootElement.replaceChildren();
+                    this.rootElement.appendChild(active.rootElement);
+                } else {
+                    console.warn(`[ForgeToolbar] Active asset not found for icon: ${assetName}`);
+                }
+                this.rootElement.setAttribute("data-active", "true");
+            } else {
+                if (regular) {
+                    this.rootElement.replaceChildren();
+                    this.rootElement.appendChild(regular.rootElement);
+                } else {
+                    console.warn(`[ForgeToolbar] Regular asset not found for icon: ${assetName}`);
+                }
+                this.rootElement.setAttribute("data-active", "false");
+            }
+        });
     }
 }
 
 // Register the custom element
 if (!customElements.get('forge-toolbar-icon')) {
+    console.log("Defining <forge-toolbar-icon> custom element");
     customElements.define('forge-toolbar-icon', ToolbarIcon);
 }
 

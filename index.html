@@ -29,42 +29,185 @@
             --forge-menu-pop-gap: 12px;
         }
     </style>
+    <script type="module" src="/src/main.ts"></script>
 </head>
 <body>
-<h1>Forge Web UI - Toolbar Demo</h1>
+    <h1>Forge Web UI - Toolbar Demo</h1>
 
-<forge-toolbar id="toolbar" direction="vertical" tool="laser">
-    <forge-toolbar-icon action="tool.laser" icon="/assets/laser.svg"></forge-toolbar-icon>
-    <forge-toolbar-icon action="tool.selector" icon="/assets/selector.svg"></forge-toolbar-icon>
-    <forge-toolbar-menu action="tool.curve" align="right">
-        <forge-toolbar-icon match="*" menu-tag="pencil" icon="/assets/pencil.svg" active-icon="/assets/pencil_hovered.svg"></forge-toolbar-icon>
-        <forge-toolbar-grid>
-            <forge-toolbar-grid-row>
-                <forge-toolbar-icon icon="/assets/pencil.svg"
-                                    active-icon="/assets/pencil_hovered.svg"></forge-toolbar-icon>
-                <forge-toolbar-icon icon="/assets/laser.svg"></forge-toolbar-icon>
-            </forge-toolbar-grid-row>
-            <forge-toolbar-grid-row>
-                <forge-toolbar-icon icon="/assets/laser.svg"></forge-toolbar-icon>
-                <forge-toolbar-icon icon="/assets/pencil.svg"></forge-toolbar-icon>
-            </forge-toolbar-grid-row>
-        </forge-toolbar-grid>
-    </forge-toolbar-menu>
-<!--    <forge-toolbar-menu tag="shape"  align="right">-->
-<!--        <forge-toolbar-grid>-->
-<!--            <forge-toolbar-grid-row>-->
-<!--                <forge-toolbar-icon icon="/assets/pencil.svg"-->
-<!--                                    active-icon="/assets/pencil_hovered.svg"></forge-toolbar-icon>-->
-<!--                <forge-toolbar-icon icon="/assets/laser.svg"></forge-toolbar-icon>-->
-<!--            </forge-toolbar-grid-row>-->
-<!--            <forge-toolbar-grid-row>-->
-<!--                <forge-toolbar-icon icon="/assets/laser.svg"></forge-toolbar-icon>-->
-<!--                <forge-toolbar-icon icon="/assets/pencil.svg"></forge-toolbar-icon>-->
-<!--            </forge-toolbar-grid-row>-->
-<!--        </forge-toolbar-grid>-->
-<!--    </forge-toolbar-menu>-->
-</forge-toolbar>
+    <forge-toolbar id="toolbar" direction="vertical" tool="curve" stroke-width="2">
+        <forge-toolbar-asset name="curve">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8062 20.5934L6.59529 22.3278C6.355 22.4078 6.09522 22.278 6.01521 22.0377C5.98391 21.9436 5.98382 21.8418 6.01521 21.7477L7.75349 16.5407L11.8062 20.5934ZM17.4117 5.97524C18.7785 4.60846 20.995 4.60856 22.3619 5.97524C23.7284 7.34205 23.7285 9.5577 22.3619 10.9245L14.0211 19.2653C13.8659 19.4202 13.626 19.44 13.4498 19.3239L13.3785 19.2653L9.07087 14.9577C8.89418 14.7804 8.89413 14.4933 9.07087 14.3161L17.4117 5.97524ZM21.1246 7.21255C20.4412 6.52929 19.3324 6.52918 18.649 7.21255L17.8385 8.02212L20.314 10.4977L21.1246 9.68716C21.8077 9.00382 21.8077 7.89593 21.1246 7.21255Z" fill="black" fill-opacity="0.8"/>
+                <path d="M6.4165 7.72959C7.26499 8.49986 9.24832 9.57824 10.3938 7.72959C11.5392 5.88093 12.8862 6.38161 13.4165 6.86303" stroke="var(--stroke-color, #FFC908)" stroke-width="1.75" stroke-linecap="round"/>
+                <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="curve" active>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.8057 20.5934L6.59476 22.3278C6.35448 22.4078 6.09469 22.278 6.01469 22.0377C5.98346 21.9437 5.98332 21.8417 6.01469 21.7477L7.75297 16.5417L11.8057 20.5934ZM17.4112 5.97525C18.778 4.60846 20.9945 4.60856 22.3614 5.97525C23.7281 7.34209 23.7282 9.55864 22.3614 10.9254L14.0205 19.2663C13.8654 19.4209 13.6254 19.4408 13.4493 19.3249L13.378 19.2663L9.07035 14.9586C8.89339 14.7814 8.89351 14.4934 9.07035 14.3161L17.4112 5.97525ZM21.1241 7.21255C20.4406 6.52928 19.3318 6.52918 18.6485 7.21255L17.8379 8.02212L20.3135 10.4977L21.1241 9.68716C21.8071 9.00375 21.8072 7.89585 21.1241 7.21255Z" fill="#4262FF"/>
+                <path d="M6.4165 7.72959C7.26499 8.49986 9.24832 9.57824 10.3938 7.72959C11.5392 5.88093 12.8862 6.38161 13.4165 6.86303" stroke="var(--stroke-color, #FFC908)" stroke-width="1.75" stroke-linecap="round"/>
+                <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="laser">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="13.9998" cy="14.0003" r="8.75" stroke="#FF0505" stroke-width="1.16667"/>
+                <g filter="url(#filter0_f_97676_146937)">
+                    <circle cx="14.0002" cy="13.9997" r="6.41667" fill="#FF0005" fill-opacity="0.4"/>
+                </g>
+                <circle cx="14" cy="14" r="2.91667" fill="#FF0005" stroke="#FF0505" stroke-width="1.16667"/>
+                <defs>
+                    <filter id="filter0_f_97676_146937" x="1.75016" y="1.74967" width="24.5002" height="24.4997" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                        <feGaussianBlur stdDeviation="2.91667" result="effect1_foregroundBlur_97676_146937"/>
+                    </filter>
+                </defs>
+            </svg>
 
-<script type="module" src="/src/main.ts"></script>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="grab">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.53739 10.3006L9.27515 12.6685C9.46741 13.2852 9.96245 13.571 10.4331 13.4233C10.7448 13.3251 11.041 12.6381 11.2222 12.1992L13.8993 5.73506C14.1368 5.1575 14.8511 4.87793 15.4714 5.14914C16.0903 5.42065 16.3816 6.13754 16.1417 6.71529L14.2904 11.9377C14.2698 12.0809 14.355 12.158 14.4569 12.0059L18.2952 6.04566C18.6044 5.50591 19.3319 5.34174 19.9208 5.67885C20.5074 6.02013 20.7293 6.73253 20.4163 7.27026L16.8706 13.4605C16.8241 13.5283 16.8778 13.5877 16.9375 13.5126L20.6663 9.23606C21.077 8.76312 21.8507 8.69831 22.3708 9.12736C22.8928 9.55598 22.9647 10.3168 22.5531 10.7893L18.4546 15.9466C18.3955 16.047 18.3981 16.1245 18.5236 16.0263L21.5654 13.6571C22.0555 13.2605 22.8327 13.3146 23.2809 13.8144C23.7288 14.3129 23.6765 15.0709 23.1855 15.467L17.1616 20.8253L17.0632 20.9138L17.0502 20.9254L17.047 20.9272C15.3938 22.3423 12.9041 22.5086 10.8787 21.3392C9.52457 20.5443 8.44332 19.3692 7.79664 17.9897C7.0247 16.7031 5.47162 10.9917 5.47162 10.9917C5.21328 10.163 5.74593 9.43001 6.59342 9.23924C7.43919 9.04852 8.27864 9.47163 8.53739 10.3006Z" stroke="black" stroke-opacity="0.8" stroke-width="1.45833"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="selector">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.87991 8.48088C7.95329 8.46636 8.02957 8.45866 8.10824 8.45866H8.37147C8.69363 8.45866 8.9548 8.19749 8.9548 7.87533C8.9548 7.55316 8.69363 7.29199 8.37147 7.29199H8.10824C7.95315 7.29199 7.80104 7.3072 7.6535 7.33639C7.33746 7.39891 7.13194 7.7058 7.19446 8.02184C7.25698 8.33788 7.56387 8.5434 7.87991 8.48088ZM9.95084 7.29199C9.62867 7.29199 9.36751 7.55316 9.36751 7.87533C9.36751 8.19749 9.62867 8.45866 9.95084 8.45866H10.4773C10.7995 8.45866 11.0606 8.19749 11.0606 7.87533C11.0606 7.55316 10.7995 7.29199 10.4773 7.29199H9.95084ZM12.0567 7.29199C11.7345 7.29199 11.4733 7.55316 11.4733 7.87533C11.4733 8.19749 11.7345 8.45866 12.0567 8.45866H12.5831C12.9053 8.45866 13.1665 8.19749 13.1665 7.87533C13.1665 7.55316 12.9053 7.29199 12.5831 7.29199H12.0567ZM14.1625 7.29199C13.8403 7.29199 13.5792 7.55316 13.5792 7.87533C13.5792 8.19749 13.8403 8.45866 14.1625 8.45866H14.689C15.0111 8.45866 15.2723 8.19749 15.2723 7.87533C15.2723 7.55316 15.0111 7.29199 14.689 7.29199H14.1625ZM16.2683 7.29199C15.9462 7.29199 15.685 7.55316 15.685 7.87533C15.685 8.19749 15.9462 8.45866 16.2683 8.45866H16.7948C17.117 8.45866 17.3781 8.19749 17.3781 7.87533C17.3781 7.55316 17.117 7.29199 16.7948 7.29199H16.2683ZM18.3742 7.29199C18.052 7.29199 17.7908 7.55316 17.7908 7.87533C17.7908 8.19749 18.052 8.45866 18.3742 8.45866H18.6374C18.7161 8.45866 18.7924 8.46636 18.8657 8.48088C19.1818 8.5434 19.4887 8.33788 19.5512 8.02184C19.6137 7.7058 19.4082 7.39891 19.0921 7.33639C18.9446 7.3072 18.7925 7.29199 18.6374 7.29199H18.3742ZM20.9263 9.17058C20.8638 8.85454 20.5569 8.64903 20.2409 8.71155C19.9248 8.77407 19.7193 9.08096 19.7818 9.397C19.7964 9.47038 19.8041 9.54666 19.8041 9.62532V9.97532C19.8041 10.2975 20.0652 10.5587 20.3874 10.5587C20.7096 10.5587 20.9707 10.2975 20.9707 9.97532V9.62532C20.9707 9.47024 20.9555 9.31813 20.9263 9.17058ZM6.96379 9.397C7.02631 9.08096 6.82079 8.77407 6.50475 8.71155C6.18871 8.64903 5.88182 8.85454 5.8193 9.17058C5.79011 9.31813 5.7749 9.47024 5.7749 9.62533V9.95345C5.7749 10.2756 6.03607 10.5368 6.35824 10.5368C6.6804 10.5368 6.94157 10.2756 6.94157 9.95345V9.62533C6.94157 9.54666 6.94927 9.47038 6.96379 9.397ZM6.94157 11.9222C6.94157 11.6 6.6804 11.3389 6.35824 11.3389C6.03607 11.3389 5.7749 11.6 5.7749 11.9222V12.5785C5.7749 12.9006 6.03607 13.1618 6.35824 13.1618C6.6804 13.1618 6.94157 12.9006 6.94157 12.5785V11.9222ZM20.9707 12.0753C20.9707 11.7532 20.7096 11.492 20.3874 11.492C20.0652 11.492 19.8041 11.7532 19.8041 12.0753V12.4253C19.8041 12.7475 20.0652 13.0087 20.3874 13.0087C20.7096 13.0087 20.9707 12.7475 20.9707 12.4253V12.0753ZM6.94157 14.5472C6.94157 14.225 6.6804 13.9639 6.35824 13.9639C6.03607 13.9639 5.7749 14.225 5.7749 14.5472V15.2035C5.7749 15.5256 6.03607 15.7868 6.35824 15.7868C6.6804 15.7868 6.94157 15.5256 6.94157 15.2035V14.5472ZM6.94157 17.1722C6.94157 16.85 6.6804 16.5889 6.35824 16.5889C6.03607 16.5889 5.7749 16.85 5.7749 17.1722V17.5003C5.7749 17.6554 5.79011 17.8075 5.8193 17.9551C5.88182 18.2711 6.18871 18.4766 6.50475 18.4141C6.82079 18.3516 7.02631 18.0447 6.96379 17.7287C6.94927 17.6553 6.94157 17.579 6.94157 17.5003V17.1722ZM7.87991 18.6448C7.56387 18.5823 7.25698 18.7878 7.19446 19.1038C7.13194 19.4198 7.33745 19.7267 7.6535 19.7893C7.80104 19.8184 7.95315 19.8337 8.10824 19.8337H8.35129C8.67346 19.8337 8.93462 19.5725 8.93462 19.2503C8.93462 18.9282 8.67346 18.667 8.35129 18.667H8.10824C8.02957 18.667 7.95329 18.6593 7.87991 18.6448ZM9.80962 18.667C9.48746 18.667 9.22629 18.9282 9.22629 19.2503C9.22629 19.5725 9.48746 19.8337 9.80962 19.8337H10.2957C10.6179 19.8337 10.8791 19.5725 10.8791 19.2503C10.8791 18.9282 10.6179 18.667 10.2957 18.667H9.80962ZM11.7541 18.667C11.4319 18.667 11.1707 18.9282 11.1707 19.2503C11.1707 19.5725 11.4319 19.8337 11.7541 19.8337H12.2402C12.5623 19.8337 12.8235 19.5725 12.8235 19.2503C12.8235 18.9282 12.5623 18.667 12.2402 18.667H11.7541ZM13.6985 18.667C13.3763 18.667 13.1152 18.9282 13.1152 19.2503C13.1152 19.5725 13.3763 19.8337 13.6985 19.8337H13.9416C14.2637 19.8337 14.5249 19.5725 14.5249 19.2503C14.5249 18.9282 14.2637 18.667 13.9416 18.667H13.6985ZM17.3463 22.6841L14.623 14.3886C14.4929 13.9921 14.7088 13.5651 15.1053 13.435C15.2606 13.384 15.4283 13.3847 15.5832 13.4372L23.8405 16.2317C24.2358 16.3654 24.4478 16.7943 24.3141 17.1896C24.244 17.3966 24.0878 17.5631 23.8858 17.6462L20.377 19.0895C20.229 19.1504 20.1124 19.2692 20.0544 19.4184L18.7684 22.7225C18.617 23.1114 18.179 23.304 17.7901 23.1526C17.5796 23.0706 17.4167 22.8988 17.3463 22.6841Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="stroke-1">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.2124 8.40039C13.8124 9.48928 11.2924 11.8537 12.4124 12.6004C13.8124 13.5337 16.1458 12.6004 16.6124 14.0004C16.9858 15.1204 13.968 18.2004 12.4124 19.6004" stroke="black" stroke-width="1.30667" stroke-linecap="round"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="stroke-2">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.0791 8C13.6791 9.08889 11.1591 11.4533 12.2791 12.2C13.6791 13.1333 16.0125 12.2 16.4791 13.6C16.8525 14.72 13.8347 17.8 12.2791 19.2" stroke="black" stroke-opacity="0.8" stroke-width="1.86667" stroke-linecap="round"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="stroke-3">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.2124 8.39844C13.8124 9.48733 11.2924 11.8518 12.4124 12.5984C13.8124 13.5318 16.1458 12.5984 16.6124 13.9984C16.9858 15.1184 13.968 18.1984 12.4124 19.5984" stroke="black" stroke-opacity="0.8" stroke-width="2.8" stroke-linecap="round"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="stroke-4">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.2124 8.40039C13.8124 9.48928 11.2924 11.8537 12.4124 12.6004C13.8124 13.5337 16.1458 12.6004 16.6124 14.0004C16.9858 15.1204 13.968 18.2004 12.4124 19.6004" stroke="black" stroke-opacity="0.8" stroke-width="3.73333" stroke-linecap="round"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="circle-menu">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0002 20.708C17.7051 20.708 20.7085 17.7046 20.7085 13.9997C20.7085 10.2948 17.7051 7.29134 14.0002 7.29134C10.2953 7.29134 7.29183 10.2948 7.29183 13.9997C7.29183 17.7046 10.2953 20.708 14.0002 20.708ZM14.0002 22.1663C18.5105 22.1663 22.1668 18.51 22.1668 13.9997C22.1668 9.48935 18.5105 5.83301 14.0002 5.83301C9.48984 5.83301 5.8335 9.48935 5.8335 13.9997C5.8335 18.51 9.48984 22.1663 14.0002 22.1663Z" fill="#FFC908"/>
+                <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="circle">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0002 20.708C17.7051 20.708 20.7085 17.7046 20.7085 13.9997C20.7085 10.2948 17.7051 7.29134 14.0002 7.29134C10.2953 7.29134 7.29183 10.2948 7.29183 13.9997C7.29183 17.7046 10.2953 20.708 14.0002 20.708ZM14.0002 22.1663C18.5105 22.1663 22.1668 18.51 22.1668 13.9997C22.1668 9.48935 18.5105 5.83301 14.0002 5.83301C9.48984 5.83301 5.8335 9.48935 5.8335 13.9997C5.8335 18.51 9.48984 22.1663 14.0002 22.1663Z" fill="black"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="rectangle-menu">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6.53343" y="6.53294" width="14.9333" height="14.9333" rx="2.8" stroke="black" stroke-opacity="0.8" stroke-width="1.86667"/>
+                <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="rectangle">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6.53343" y="6.53294" width="14.9333" height="14.9333" rx="2.8" stroke="black" stroke-opacity="0.8" stroke-width="1.86667"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="triangle-menu">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.083 19.5996H5.91699L14 5.59961L22.083 19.5996Z" stroke="black" stroke-opacity="0.8" stroke-width="1.86667"/>
+                <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="triangle">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.083 19.5996H5.91699L14 5.59961L22.083 19.5996Z" stroke="black" stroke-opacity="0.8" stroke-width="1.86667"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="line-menu">
+            <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path d="M7.81335 20.1875L20.1877 7.81313" stroke="black" stroke-opacity="0.8"
+                          stroke-width="1.75" stroke-linecap="round" />
+                    <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+                </g>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="line">
+            <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.81335 20.1875L20.1877 7.81313" stroke="black" stroke-opacity="0.8" stroke-width="1.75" stroke-linecap="round" />
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="arrow-menu">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.73994 18.9402C7.37545 19.3047 7.37545 19.8956 7.73994 20.2601C8.10443 20.6246 8.69538 20.6246 9.05987 20.2601L8.3999 19.6001L7.73994 18.9402ZM20.5332 7.4668H21.4666C21.4666 6.95133 21.0487 6.53346 20.5332 6.53346V7.4668ZM8.3999 19.6001L9.05987 20.2601L21.1932 8.12676L20.5332 7.4668L19.8733 6.80683L7.73994 18.9402L8.3999 19.6001ZM20.5332 7.4668H19.5999V14.4668H20.5332H21.4666V7.4668H20.5332ZM20.5332 7.4668V6.53346H13.9999V7.4668V8.40013H20.5332V7.4668ZM13.9999 7.4668V6.53346H13.0666V7.4668V8.40013H13.9999V7.4668Z" fill="black" fill-opacity="0.8"/>
+                <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="arrow">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.73994 18.9402C7.37545 19.3047 7.37545 19.8956 7.73994 20.2601C8.10443 20.6246 8.69538 20.6246 9.05987 20.2601L8.3999 19.6001L7.73994 18.9402ZM20.5332 7.4668H21.4666C21.4666 6.95133 21.0487 6.53346 20.5332 6.53346V7.4668ZM8.3999 19.6001L9.05987 20.2601L21.1932 8.12676L20.5332 7.4668L19.8733 6.80683L7.73994 18.9402L8.3999 19.6001ZM20.5332 7.4668H19.5999V14.4668H20.5332H21.4666V7.4668H20.5332ZM20.5332 7.4668V6.53346H13.9999V7.4668V8.40013H20.5332V7.4668ZM13.9999 7.4668V6.53346H13.0666V7.4668V8.40013H13.9999V7.4668Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-icon action="tool.laser" icon="laser"></forge-toolbar-icon>
+        <forge-toolbar-icon action="tool.grab" icon="grab"></forge-toolbar-icon>
+        <forge-toolbar-icon action="tool.selector" icon="selector"></forge-toolbar-icon>
+        <forge-toolbar-menu align="right" display-icon="curve">
+            <forge-toolbar-icon match="tool.curve" icon="curve"></forge-toolbar-icon>
+            <forge-toolbar-grid>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="stroke-1"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="stroke-2"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="stroke-3"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="stroke-4"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+            </forge-toolbar-grid>
+        </forge-toolbar-menu>
+        <forge-toolbar-menu align="right" display-icon="circle-menu">
+            <forge-toolbar-icon match="tool.menuShape" icon="circle-menu"></forge-toolbar-icon>
+            <forge-toolbar-icon match="tool.menuShape" icon="rectangle-menu"></forge-toolbar-icon>
+            <forge-toolbar-grid>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="rectangle"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="circle"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="triangle"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="line"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="arrow"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-divider></forge-toolbar-grid-divider>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="stroke-1"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="stroke-2"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="stroke-3"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon icon="stroke-4"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+            </forge-toolbar-grid>
+        </forge-toolbar-menu>
+    </forge-toolbar>
 </body>
 </html>

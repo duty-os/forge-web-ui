@@ -1,6 +1,20 @@
+import { forgeElementReady } from "./utils.ts";
+
 import type { ToolbarIcon } from "./ToolbarIcon.ts";
 
+class ToolbarGridDivider extends HTMLElement {
+
+    public readonly rootElement: HTMLDivElement;
+
+    constructor() {
+        super();
+        this.rootElement = document.createElement('div');
+        this.rootElement.classList.add("menu-grid-divider");
+    }
+}
+
 class ToolbarGridRow extends HTMLElement {
+
     public readonly rootElement: HTMLDivElement;
 
     constructor() {
@@ -17,13 +31,17 @@ class ToolbarGridRow extends HTMLElement {
         this.rootElement.replaceChildren();
         for (const child of Array.from(this.children)) {
             if (child.tagName.toLowerCase() === "forge-toolbar-icon") {
-                this.rootElement.appendChild((child as ToolbarIcon).rootElement);
+                const icon = child as ToolbarIcon;
+                if (icon.rootElement) {
+                    this.rootElement.appendChild(icon.rootElement);
+                }
             }
         }
     }
 }
 
 class ToolbarGrid extends HTMLElement {
+
     public readonly rootElement: HTMLDivElement;
     constructor() {
         super();
@@ -36,22 +54,39 @@ class ToolbarGrid extends HTMLElement {
     }
 
     private handleChildrenUpdate() {
-        this.rootElement.replaceChildren();
-        for (const child of Array.from(this.children)) {
-            if (child.tagName.toLowerCase() === "forge-toolbar-grid-row") {
-                this.rootElement.appendChild((child as ToolbarGridRow).rootElement);
+        forgeElementReady().then(() => {
+            this.rootElement.replaceChildren();
+            for (const child of Array.from(this.children)) {
+                if (child.tagName.toLowerCase() === "forge-toolbar-grid-row") {
+                    this.rootElement.appendChild((child as ToolbarGridRow).rootElement);
+                }
+                if (child.tagName.toLowerCase() === "forge-toolbar-grid-divider") {
+                    this.rootElement.appendChild((child as ToolbarGridDivider).rootElement);
+                }
             }
-        }
+        });
     }
 }
 
 class ToolbarMenu extends HTMLElement {
 
-    private menuGrid: ToolbarGrid | null = null;
+    static isToolbarMenu(element: any): element is ToolbarMenu {
+        return element instanceof ToolbarMenu;
+    }
+
     public readonly rootElement: HTMLDivElement;
 
+    private get menuGrid(): ToolbarGrid | null {
+        for (const child of Array.from(this.children)) {
+            if (child.tagName.toLowerCase() === "forge-toolbar-grid") {
+                return child as ToolbarGrid;
+            }
+        }
+        return null;
+    }
+
     static get observedAttributes() {
-        return ['align'];
+        return ['align', 'display-icon'];
     }
 
     constructor() {
@@ -59,14 +94,22 @@ class ToolbarMenu extends HTMLElement {
         this.rootElement = document.createElement("div");
         this.rootElement.classList.add("menu-container");
         this.rootElement.addEventListener("click", this.toggle);
+        document.body.addEventListener("click", (event: any) => {
+            forgeElementReady().then(() => {
+                if (event.target.closest("forge-toolbar") === null && this.menuGrid && this.menuGrid.rootElement.hasAttribute("data-open")) {
+                    this.menuGrid.rootElement.removeAttribute("data-open");
+                }
+            });
+        }, { capture: true });
     }
 
-    private toggle = () => {
+    private toggle = (event: any) => {
+        console.log(event);
         if (this.menuGrid) {
-            if (this.menuGrid.rootElement.classList.contains("menu-grid-open")) {
-                this.menuGrid.rootElement.classList.remove("menu-grid-open");
+            if (this.menuGrid.rootElement.hasAttribute("data-open")) {
+                this.menuGrid.rootElement.removeAttribute("data-open")
             } else {
-                this.menuGrid.rootElement.classList.add("menu-grid-open");
+                this.menuGrid.rootElement.setAttribute("data-open", "");
             }
         }
     };
@@ -76,44 +119,69 @@ class ToolbarMenu extends HTMLElement {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        if (oldValue === newValue) return;
-        if (name === 'align') {
-            if (this.menuGrid) {
-                this.menuGrid.rootElement.setAttribute("data-align", newValue);
+        forgeElementReady().then(() => {
+            if (oldValue === newValue) return;
+            if (name === 'align') {
+                if (this.menuGrid) {
+                    this.menuGrid.rootElement.setAttribute("data-align", newValue);
+                }
             }
-        }
+            if (name === 'display-icon') {
+                this.querySelectorAll("& > forge-toolbar-icon").forEach((icon) => {
+                    if (icon.getAttribute("icon") === newValue) {
+                        const iconContainer = this.querySelector("[data-icon-container]");
+                        if (iconContainer) {
+                            iconContainer.replaceChildren();
+                            iconContainer.appendChild((icon as ToolbarIcon).rootElement);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private handleChildrenUpdate() {
-        this.rootElement.replaceChildren();
-        let isGridAdded = false;
-        for (const child of Array.from(this.children)) {
-            if (child.tagName.toLowerCase() === "forge-toolbar-icon") {
-                this.rootElement.appendChild((child as ToolbarIcon).rootElement);
-            }
-            if (child.tagName.toLowerCase() === "forge-toolbar-grid") {
-                if (isGridAdded) {
-                    console.warn("Multiple <forge-toolbar-grid> elements found inside <forge-toolbar-menu>. Only the first one will be used.");
-                    continue;
+        forgeElementReady().then(() => {
+            this.rootElement.replaceChildren();
+            const iconContainer = document.createElement("div");
+            iconContainer.setAttribute("data-icon-container", "");
+            this.rootElement.appendChild(iconContainer);
+            let isGridAdded = false;
+            for (const child of Array.from(this.children)) {
+                if (child.tagName.toLowerCase() === "forge-toolbar-icon" && this.getAttribute("display-icon") === child.getAttribute("icon")) {
+                    const icon = child as ToolbarIcon;
+                    if (icon.rootElement) {
+                        iconContainer.appendChild(icon.rootElement);
+                    }
                 }
-                isGridAdded = true;
-                this.rootElement.appendChild((child as ToolbarGrid).rootElement);
+                if (child.tagName.toLowerCase() === "forge-toolbar-grid") {
+                    if (isGridAdded) {
+                        console.warn("Multiple <forge-toolbar-grid> elements found inside <forge-toolbar-menu>. Only the first one will be used.");
+                        continue;
+                    }
+                    isGridAdded = true;
+                    this.rootElement.appendChild((child as ToolbarGrid).rootElement);
+                }
             }
-        }
+        });
     }
 }
 
-// Register the custom elements
+if (!customElements.get('forge-toolbar-menu')) {
+    console.log("Defining <forge-toolbar-menu> custom element");
+    customElements.define('forge-toolbar-menu', ToolbarMenu);
+}
 if (!customElements.get('forge-toolbar-grid-row')) {
+    console.log("Defining <forge-toolbar-grid-row> custom element");
     customElements.define('forge-toolbar-grid-row', ToolbarGridRow);
 }
-
 if (!customElements.get('forge-toolbar-grid')) {
+    console.log("Defining <forge-toolbar-grid> custom element");
     customElements.define('forge-toolbar-grid', ToolbarGrid);
 }
-
-if (!customElements.get('forge-toolbar-menu')) {
-    customElements.define('forge-toolbar-menu', ToolbarMenu);
+if (!customElements.get('forge-toolbar-grid-divider')) {
+    console.log("Defining <forge-toolbar-grid-divider> custom element");
+    customElements.define('forge-toolbar-grid-divider', ToolbarGridDivider);
 }
 
 export { ToolbarMenu, ToolbarGrid, ToolbarGridRow };

@@ -1,5 +1,7 @@
 import type { ToolbarIcon } from './ToolbarIcon';
-import type {ToolbarMenu} from "./ToolbarMenu.ts";
+import type { ToolbarMenu } from "./ToolbarMenu.ts";
+import type { ToolbarAsset } from "./ToolbarAsset.ts";
+import {forgeElementReady} from "./utils.ts";
 
 export class Toolbar extends HTMLElement {
 
@@ -7,6 +9,7 @@ export class Toolbar extends HTMLElement {
     private readonly container: HTMLDivElement;
     private readonly styleElement: HTMLStyleElement;
     private readonly ovserver: MutationObserver;
+    private assets: Array<ToolbarAsset>;
 
     static get observedAttributes() {
         return ['direction', 'tool'];
@@ -14,10 +17,14 @@ export class Toolbar extends HTMLElement {
 
     constructor() {
         super();
+        this.assets = [];
         this.shadow = this.attachShadow({ mode: 'closed' });
         // Create style
         this.styleElement = document.createElement('style');
         this.styleElement.textContent = `
+            :host {
+                --stroke-color: red;
+            }
             div.container {
                 display: flex;
                 gap: 12px;
@@ -55,7 +62,7 @@ export class Toolbar extends HTMLElement {
                 cursor: pointer;
             }
             
-            img.toolbar-icon {
+            div.toolbar-icon {
                 display: inline-block;
                 width: 34px;
                 height: 34px;
@@ -65,8 +72,13 @@ export class Toolbar extends HTMLElement {
                 box-sizing: border-box;
                 object-fit: contain;
             }
+            
+            div.toolbar-icon > svg {
+                width: 100%;
+                height: 100%;
+            }
 
-            img.toolbar-icon[data-active="true"] {
+            div.toolbar-icon[data-active="true"] {
                 background-color: #e0e7ff;
             }
             
@@ -109,7 +121,7 @@ export class Toolbar extends HTMLElement {
                 transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px)));
             }
             
-            div.menu-grid[data-open="true"] {
+            div.menu-grid[data-open] {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
@@ -118,6 +130,13 @@ export class Toolbar extends HTMLElement {
             div.menu-grid-row {
                 display: flex;
                 gap: 8px;
+            }
+            
+            div.menu-grid-divider {
+                width: 100%;
+                height: 1px;
+                background-color: #e0e0e0;
+                margin: 4px 0;
             }
         `;
 
@@ -148,28 +167,47 @@ export class Toolbar extends HTMLElement {
     }
 
     private handleChildrenUpdate() {
-        this.container.replaceChildren();
-        for (const child of Array.from(this.children)) {
-            if (child.tagName.toLowerCase() === "forge-toolbar-icon") {
-                this.container.appendChild((child as ToolbarIcon).rootElement);
+        forgeElementReady().then(() => {
+            this.container.replaceChildren();
+            this.assets = [];
+            for (const child of Array.from(this.children)) {
+                if (!customElements.get(child.tagName.toLowerCase())) {
+                    continue;
+                }
+                if (child.tagName.toLowerCase() === "forge-toolbar-icon") {
+                    this.container.appendChild((child as ToolbarIcon).rootElement);
+                }
+                if (child.tagName.toLowerCase() === "forge-toolbar-menu") {
+                    this.container.appendChild((child as ToolbarMenu).rootElement);
+                }
+                if (child.tagName.toLowerCase() === "forge-toolbar-asset") {
+                    this.assets.push(child as ToolbarAsset);
+                }
             }
-            if (child.tagName.toLowerCase() === "forge-toolbar-menu") {
-                this.container.appendChild((child as ToolbarMenu).rootElement);
-            }
-        }
+        });
     }
 
     private handleToolUpdate() {
-        const currentTool = this.getAttribute('tool');
-        if (currentTool) {
-            this.querySelectorAll("forge-toolbar-icon").forEach((icon: Element) => {
-                (icon as ToolbarIcon).updateImage();
-            });
-        }
+        forgeElementReady().then(() => {
+            const currentTool = this.getAttribute('tool');
+            if (currentTool) {
+                this.querySelectorAll("forge-toolbar-icon").forEach((icon: Element) => {
+                    if (customElements.get(icon.tagName.toLowerCase())) {
+                        (icon as ToolbarIcon).updateImage();
+                    }
+                });
+            }
+        });
+    }
+
+    public getAssetByName(name: string): { regular: ToolbarAsset | null, active: ToolbarAsset | null } {
+        const regular = this.assets.find(asset => asset.getAttribute('name') === name && !asset.hasAttribute('active'));
+        const active = this.assets.find(asset => asset.getAttribute('name') === name && asset.hasAttribute('active'));
+        return { regular: regular ?? null, active: active ?? regular ?? null };
     }
 }
 
-// Register the custom element
 if (!customElements.get('forge-toolbar')) {
+    console.log("Defining <forge-toolbar> custom element");
     customElements.define('forge-toolbar', Toolbar);
 }
