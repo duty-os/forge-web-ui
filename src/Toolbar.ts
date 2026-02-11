@@ -47,23 +47,23 @@ export class Toolbar extends HTMLElement {
                 top: 50%;
                 transform: translate(calc(var(--forge-menu-align-gap, -12px) + var(--drag-offset-x, 0px)), calc(-50% + var(--drag-offset-y, 0px)));
             }
-            
+
             div.container[data-align="left"] {
                 left: 0;
                 top: 50%;
                 transform: translate(calc(var(--forge-menu-align-gap, 12px) + var(--drag-offset-x, 0px)), calc(-50% + var(--drag-offset-y, 0px)));
             }
-            
+
             div.container[data-align="top"] {
                 left: 50%;
                 top: 0;
-                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px)));
+                transform: translate(calc(-50% + var(--drag-offset-x, 0px)), calc(var(--forge-menu-align-gap, 12px) + var(--drag-offset-y, 0px)));
             }
-            
+
             div.container[data-align="bottom"] {
                 left: 50%;
                 bottom: 0;
-                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px)));
+                transform: translate(calc(-50% + var(--drag-offset-x, 0px)), calc(var(--drag-offset-y, 0px) - var(--forge-menu-align-gap, 12px)));
             }
 
             div.container[data-direction="vertical"] {

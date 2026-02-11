@@ -114,12 +114,19 @@ class DragHandle extends HTMLElement {
                 if (shouldSnap && newAlign) {
                     // Update align attribute
                     this.toolbar.setAttribute('align', newAlign);
-                    // Reset offset after a short delay to allow align to take effect
-                    setTimeout(() => {
-                        this.resetOffsetWithAnimation();
-                    }, 50);
+
+                    // Update direction based on align
+                    if (newAlign === 'top' || newAlign === 'bottom') {
+                        this.toolbar.setAttribute('direction', 'horizontal');
+                    } else {
+                        this.toolbar.setAttribute('direction', 'vertical');
+                    }
+
+                    // Reset offset immediately without animation when snapping
+                    this.toolbar.style.setProperty('--drag-offset-x', '0px');
+                    this.toolbar.style.setProperty('--drag-offset-y', '0px');
                 } else {
-                    // Reset offset with animation
+                    // Reset offset with animation when not snapping
                     this.resetOffsetWithAnimation();
                 }
             }
