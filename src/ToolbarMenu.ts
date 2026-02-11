@@ -1,6 +1,7 @@
 import { forgeElementReady } from "./utils.ts";
 
 import type { ToolbarIcon } from "./ToolbarIcon.ts";
+import type { Toolbar } from "./Toolbar.ts";
 
 class ToolbarGridDivider extends HTMLElement {
 
@@ -35,6 +36,9 @@ class ToolbarGridRow extends HTMLElement {
                 if (icon.rootElement) {
                     this.rootElement.appendChild(icon.rootElement);
                 }
+            }
+            if (child.tagName.toLowerCase() === "forge-toolbar-menu") {
+                this.rootElement.appendChild((child as ToolbarMenu).rootElement);
             }
         }
     }
@@ -103,8 +107,16 @@ class ToolbarMenu extends HTMLElement {
         }, { capture: true });
     }
 
-    private toggle = (event: any) => {
-        console.log(event);
+    private toggle = () => {
+
+        const toolbar = this.closest("forge-toolbar") as Toolbar;
+
+        const menus = toolbar.querySelectorAll("forge-toolbar-menu") as NodeListOf<ToolbarMenu>;
+
+        menus.forEach(menu => {
+            menu.menuGrid?.rootElement.removeAttribute("data-open");
+        });
+
         if (this.menuGrid) {
             if (this.menuGrid.rootElement.hasAttribute("data-open")) {
                 this.menuGrid.rootElement.removeAttribute("data-open")

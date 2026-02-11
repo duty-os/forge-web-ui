@@ -6,6 +6,7 @@ export async function forgeElementReady(): Promise<void> {
         customElements.whenDefined("forge-toolbar"),
         customElements.whenDefined("forge-toolbar-grid-row"),
         customElements.whenDefined("forge-toolbar-grid"),
-        customElements.whenDefined("forge-toolbar-grid-divider")
+        customElements.whenDefined("forge-toolbar-grid-divider"),
+        customElements.whenDefined("forge-drag-handle")
     ]);
 }

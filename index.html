@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forge Web UI - Toolbar Demo</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: #f5f5f5;
@@ -31,10 +25,8 @@
     </style>
     <script type="module" src="/src/main.ts"></script>
 </head>
-<body>
-    <h1>Forge Web UI - Toolbar Demo</h1>
-
-    <forge-toolbar id="toolbar" direction="vertical" tool="curve" stroke-width="2">
+<body style="margin: 0;width: 100vw;height: 100vh;">
+    <forge-toolbar align="right" id="forge-toolbar" direction="vertical">
         <forge-toolbar-asset name="curve">
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M11.8062 20.5934L6.59529 22.3278C6.355 22.4078 6.09522 22.278 6.01521 22.0377C5.98391 21.9436 5.98382 21.8418 6.01521 21.7477L7.75349 16.5407L11.8062 20.5934ZM17.4117 5.97524C18.7785 4.60846 20.995 4.60856 22.3619 5.97524C23.7284 7.34205 23.7285 9.5577 22.3619 10.9245L14.0211 19.2653C13.8659 19.4202 13.626 19.44 13.4498 19.3239L13.3785 19.2653L9.07087 14.9577C8.89418 14.7804 8.89413 14.4933 9.07087 14.3161L17.4117 5.97524ZM21.1246 7.21255C20.4412 6.52929 19.3324 6.52918 18.649 7.21255L17.8385 8.02212L20.314 10.4977L21.1246 9.68716C21.8077 9.00382 21.8077 7.89593 21.1246 7.21255Z" fill="black" fill-opacity="0.8"/>
@@ -154,6 +146,39 @@
                 <path d="M7.73994 18.9402C7.37545 19.3047 7.37545 19.8956 7.73994 20.2601C8.10443 20.6246 8.69538 20.6246 9.05987 20.2601L8.3999 19.6001L7.73994 18.9402ZM20.5332 7.4668H21.4666C21.4666 6.95133 21.0487 6.53346 20.5332 6.53346V7.4668ZM8.3999 19.6001L9.05987 20.2601L21.1932 8.12676L20.5332 7.4668L19.8733 6.80683L7.73994 18.9402L8.3999 19.6001ZM20.5332 7.4668H19.5999V14.4668H20.5332H21.4666V7.4668H20.5332ZM20.5332 7.4668V6.53346H13.9999V7.4668V8.40013H20.5332V7.4668ZM13.9999 7.4668V6.53346H13.0666V7.4668V8.40013H13.9999V7.4668Z" fill="black" fill-opacity="0.8"/>
             </svg>
         </forge-toolbar-asset>
+        <forge-toolbar-asset name="text">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1393 6.66699L21.3332 10.5752H20.8429C20.7483 9.88705 20.6194 9.39567 20.4564 9.09997C20.1896 8.6249 19.835 8.27484 19.3938 8.04872C18.9503 7.82478 18.3677 7.71172 17.6471 7.71172H15.1856V18.4452C15.1856 19.4692 15.3007 20.1085 15.5333 20.3629C15.8594 20.7064 16.3622 20.8782 17.0417 20.8782H17.6471V21.3337H10.2363V20.8782H10.8542C11.593 20.8782 12.1175 20.6651 12.4265 20.24C12.6146 19.978 12.7103 19.379 12.7103 18.4452V7.71172H10.6102C9.79389 7.71172 9.21242 7.76933 8.86924 7.88348C8.42231 8.03894 8.0415 8.33898 7.72227 8.78036C7.40417 9.2239 7.21605 9.82073 7.15562 10.5752H6.6665L6.87173 6.66699H21.1393Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="palette">
+            <svg width="28" height="28" viewBox="-5 -5 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#paint0_angular_97714_9104_clip_path)" data-figma-skip-parse="true"><g transform="matrix(0 0.009 -0.009 0 9 9)"><foreignObject x="-1055.56" y="-1055.56" width="2111.11" height="2111.11"><div xmlns="http://www.w3.org/1999/xhtml" style="background:conic-gradient(from 90deg,rgba(255, 112, 112, 1) 0deg,rgba(255, 163, 112, 1) 30deg,rgba(255, 226, 127, 1) 63.75deg,rgba(227, 255, 116, 1) 91.875deg,rgba(169, 255, 116, 1) 125.625deg,rgba(121, 255, 142, 1) 163.125deg,rgba(113, 255, 229, 1) 189.375deg,rgba(112, 207, 247, 1) 210deg,rgba(104, 128, 255, 1) 232.5deg,rgba(119, 86, 255, 1) 260.625deg,rgba(221, 86, 255, 1) 277.5deg,rgba(255, 86, 217, 1) 303.75deg,rgba(255, 55, 151, 1) 327.962deg,rgba(255, 99, 99, 1) 340.255deg,rgba(255, 86, 86, 1) 359.931deg,rgba(255, 112, 112, 1) 360deg);height:100%;width:100%;opacity:1"></div></foreignObject></g></g><circle cx="9" cy="9" r="9" data-figma-gradient-fill="{&#34;type&#34;:&#34;GRADIENT_ANGULAR&#34;,&#34;stops&#34;:[{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.44236111640930176,&#34;b&#34;:0.44236111640930176,&#34;a&#34;:1.0},&#34;position&#34;:0.0},{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.64311116933822632,&#34;b&#34;:0.44236111640930176,&#34;a&#34;:1.0},&#34;position&#34;:0.083333335816860199},{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.88986647129058838,&#34;b&#34;:0.49939239025115967,&#34;a&#34;:1.0},&#34;position&#34;:0.17708332836627960},{&#34;color&#34;:{&#34;r&#34;:0.89166665077209473,&#34;g&#34;:1.0,&#34;b&#34;:0.45833331346511841,&#34;a&#34;:1.0},&#34;position&#34;:0.25520834326744080},{&#34;color&#34;:{&#34;r&#34;:0.66416656970977783,&#34;g&#34;:1.0,&#34;b&#34;:0.45833331346511841,&#34;a&#34;:1.0},&#34;position&#34;:0.34895834326744080},{&#34;color&#34;:{&#34;r&#34;:0.47500002384185791,&#34;g&#34;:1.0,&#34;b&#34;:0.55900007486343384,&#34;a&#34;:1.0},&#34;position&#34;:0.4531250},{&#34;color&#34;:{&#34;r&#34;:0.44583332538604736,&#34;g&#34;:1.0,&#34;b&#34;:0.90024995803833008,&#34;a&#34;:1.0},&#34;position&#34;:0.52604168653488159},{&#34;color&#34;:{&#34;r&#34;:0.44092011451721191,&#34;g&#34;:0.81185925006866455,&#34;b&#34;:0.97083336114883423,&#34;a&#34;:1.0},&#34;position&#34;:0.58333331346511841},{&#34;color&#34;:{&#34;r&#34;:0.40833336114883423,&#34;g&#34;:0.50300008058547974,&#34;b&#34;:1.0,&#34;a&#34;:1.0},&#34;position&#34;:0.64583331346511841},{&#34;color&#34;:{&#34;r&#34;:0.46999984979629517,&#34;g&#34;:0.33749997615814209,&#34;b&#34;:1.0,&#34;a&#34;:1.0},&#34;position&#34;:0.72395831346511841},{&#34;color&#34;:{&#34;r&#34;:0.86750012636184692,&#34;g&#34;:0.33749997615814209,&#34;b&#34;:1.0,&#34;a&#34;:1.0},&#34;position&#34;:0.77083331346511841},{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.33749997615814209,&#34;b&#34;:0.85424983501434326,&#34;a&#34;:1.0},&#34;position&#34;:0.843750},{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.21666663885116577,&#34;b&#34;:0.59266662597656250,&#34;a&#34;:1.0},&#34;position&#34;:0.91100537776947021},{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.39166665077209473,&#34;b&#34;:0.39166665077209473,&#34;a&#34;:1.0},&#34;position&#34;:0.94515150785446167},{&#34;color&#34;:{&#34;r&#34;:1.0,&#34;g&#34;:0.33749997615814209,&#34;b&#34;:0.33749997615814209,&#34;a&#34;:1.0},&#34;position&#34;:0.99980926513671875}],&#34;stopsVar&#34;:[],&#34;transform&#34;:{&#34;m00&#34;:1.1021821408568715e-15,&#34;m01&#34;:-18.0,&#34;m02&#34;:18.0,&#34;m10&#34;:18.0,&#34;m11&#34;:1.1021821408568715e-15,&#34;m12&#34;:-1.1021821408568715e-15},&#34;opacity&#34;:1.0,&#34;blendMode&#34;:&#34;NORMAL&#34;,&#34;visible&#34;:true}"/>
+                <defs>
+                    <clipPath id="paint0_angular_97714_9104_clip_path">
+                        <circle cx="9" cy="9" r="9"/>
+                    </clipPath>
+                </defs>
+                <g>
+                    <circle cx="9" cy="9" r="6" fill="red"/>
+                    <path transform="scale(1.2), translate(1.45,1.45)" fill-rule="evenodd" clip-rule="evenodd" d="M9.06572 3.6499C9.29457 3.86529 9.31276 4.23349 9.10634 4.47229L5.86293 8.22455C5.54547 8.59181 4.99323 8.59182 4.67577 8.22455L3.14366 6.45208C2.93724 6.21328 2.95543 5.84508 3.18429 5.62969C3.41314 5.4143 3.766 5.43328 3.97242 5.67208L5.26935 7.17248L8.27758 3.6923C8.484 3.45349 8.83686 3.43451 9.06572 3.6499Z" fill="white"/>
+                </g>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="palette-icon">
+            <svg width="20" height="20" viewBox="-7 -7 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="9" fill="var(--theme-color)"/>
+                <circle cx="10" cy="10" r="9.5" stroke="black" stroke-opacity="0.1"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="palette-icon" active>
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="15" r="9" fill="var(--theme-color)"/>
+                <circle cx="15" cy="15" r="9.5" stroke="black" stroke-opacity="0.1"/>
+                <rect x="2.5" y="2.5" width="25" height="25" rx="12.5" stroke="var(--theme-color)" stroke-width="3"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5986 11.4749C19.9419 11.7979 19.9691 12.3502 19.6595 12.7084L14.7944 18.3368C14.3182 18.8877 13.4898 18.8877 13.0136 18.3368L10.7155 15.6781C10.4059 15.3199 10.4331 14.7676 10.7764 14.4445C11.1197 14.1214 11.649 14.1499 11.9586 14.5081L13.904 16.7587L18.4164 11.5384C18.726 11.1802 19.2553 11.1518 19.5986 11.4749Z" fill="white"/>
+            </svg>
+        </forge-toolbar-asset>
         <forge-toolbar-icon action="tool.laser" icon="laser"></forge-toolbar-icon>
         <forge-toolbar-icon action="tool.grab" icon="grab"></forge-toolbar-icon>
         <forge-toolbar-icon action="tool.selector" icon="selector"></forge-toolbar-icon>
@@ -161,16 +186,16 @@
             <forge-toolbar-icon match="tool.curve" icon="curve"></forge-toolbar-icon>
             <forge-toolbar-grid>
                 <forge-toolbar-grid-row>
-                    <forge-toolbar-icon icon="stroke-1"></forge-toolbar-icon>
+                    <forge-toolbar-icon action="tool.curve,stroke-width.2" icon="stroke-1"></forge-toolbar-icon>
                 </forge-toolbar-grid-row>
                 <forge-toolbar-grid-row>
-                    <forge-toolbar-icon icon="stroke-2"></forge-toolbar-icon>
+                    <forge-toolbar-icon action="tool.curve,stroke-width.4" icon="stroke-2"></forge-toolbar-icon>
                 </forge-toolbar-grid-row>
                 <forge-toolbar-grid-row>
-                    <forge-toolbar-icon icon="stroke-3"></forge-toolbar-icon>
+                    <forge-toolbar-icon action="tool.curve,stroke-width.6" icon="stroke-3"></forge-toolbar-icon>
                 </forge-toolbar-grid-row>
                 <forge-toolbar-grid-row>
-                    <forge-toolbar-icon icon="stroke-4"></forge-toolbar-icon>
+                    <forge-toolbar-icon action="tool.curve,stroke-width.8" icon="stroke-4"></forge-toolbar-icon>
                 </forge-toolbar-grid-row>
             </forge-toolbar-grid>
         </forge-toolbar-menu>
@@ -208,6 +233,42 @@
                 </forge-toolbar-grid-row>
             </forge-toolbar-grid>
         </forge-toolbar-menu>
+        <forge-toolbar-icon action="tool.text" icon="text"></forge-toolbar-icon>
+        <forge-toolbar-menu align="right" display-icon="palette">
+            <forge-toolbar-icon icon="palette"></forge-toolbar-icon>
+            <forge-toolbar-grid>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon action="stroke-color.#E2E2E2" icon="palette-icon" theme="#E2E2E2" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#A1C473" icon="palette-icon" theme="#A1C473" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#FFC908" icon="palette-icon" theme="#FFC908" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#CC3100" icon="palette-icon" theme="#CC3100" disable-active-background></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon action="stroke-color.#968D86" icon="palette-icon" theme="#968D86" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#4262FF" icon="palette-icon" theme="#4262FF" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#51BD69" icon="palette-icon" theme="#51BD69" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#FF86C9" icon="palette-icon" theme="#FF86C9" disable-active-background></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon action="stroke-color.#0E0E0E" icon="palette-icon" theme="#0E0E0E" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#50E3C2" icon="palette-icon" theme="#50E3C2" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#FC3141" icon="palette-icon" theme="#FC3141" disable-active-background></forge-toolbar-icon>
+                    <forge-toolbar-icon action="stroke-color.#7740EC" icon="palette-icon" theme="#7740EC" disable-active-background></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+            </forge-toolbar-grid>
+        </forge-toolbar-menu>
+        <forge-drag-handle>
+            <svg width="27" height="9" viewBox="0 0 27 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="1.5" cy="1.5" r="1.5" fill="black" fill-opacity="0.1"/>
+                <circle cx="1.5" cy="7.5" r="1.5" fill="black" fill-opacity="0.1"/>
+                <circle cx="9.5" cy="1.5" r="1.5" fill="black" fill-opacity="0.1"/>
+                <circle cx="9.5" cy="7.5" r="1.5" fill="black" fill-opacity="0.1"/>
+                <circle cx="17.5" cy="1.5" r="1.5" fill="black" fill-opacity="0.1"/>
+                <circle cx="17.5" cy="7.5" r="1.5" fill="black" fill-opacity="0.1"/>
+                <circle cx="25.5" cy="1.5" r="1.5" fill="black" fill-opacity="0.1"/>
+                <circle cx="25.5" cy="7.5" r="1.5" fill="black" fill-opacity="0.1"/>
+            </svg>
+        </forge-drag-handle>
     </forge-toolbar>
 </body>
 </html>

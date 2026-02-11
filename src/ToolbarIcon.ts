@@ -23,7 +23,7 @@ class ToolbarIcon extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['icon', 'action'];
+        return ['icon', 'action', 'theme', 'disable-active-background'];
     }
 
     constructor() {
@@ -38,6 +38,22 @@ class ToolbarIcon extends HTMLElement {
         if (action) {
             e.preventDefault();
             e.stopPropagation();
+            const action = this.getAttribute("action");
+            if (action) {
+                const attrs = action.split(",").map(s => s.trim());
+                for (const attr of attrs) {
+                    const [property, value] = attr.split(".");
+                    if (property === "tool") {
+                        this.toolbar?.setCurrentTool(value as any);
+                    }
+                    if (property === "stroke-width") {
+                        this.toolbar?.setStrokeWidth(parseInt(value));
+                    }
+                    if (property === "stroke-color") {
+                        this.toolbar?.setStrokeColor(value);
+                    }
+                }
+            }
             console.log("Icon clicked:", this.getAttribute("action"));
         }
     };
@@ -47,8 +63,18 @@ class ToolbarIcon extends HTMLElement {
     }
 
     attributeChangedCallback(_name: string, oldValue: string, newValue: string) {
-        if (oldValue !== newValue) {
-            this.updateImage();
+        if (_name === "theme") {
+            this.rootElement.style.setProperty("--theme-color", newValue);
+        } else if (_name === "disable-active-background") {
+            if (newValue === null) {
+                this.rootElement.removeAttribute("data-disable-active-background");
+            } else {
+                this.rootElement.setAttribute("data-disable-active-background", "");
+            }
+        } else {
+            if (oldValue !== newValue) {
+                this.updateImage();
+            }
         }
     }
 
