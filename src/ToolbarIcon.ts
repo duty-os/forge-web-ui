@@ -1,5 +1,6 @@
 import type { Toolbar } from "./Toolbar.ts";
 import {forgeElementReady} from "./utils.ts";
+import {ToolbarMenu} from "./ToolbarMenu.ts";
 
 class ToolbarIcon extends HTMLElement {
 
@@ -52,6 +53,17 @@ class ToolbarIcon extends HTMLElement {
                     if (property === "stroke-color") {
                         this.toolbar?.setStrokeColor(value);
                     }
+                    if (property === "call") {
+                        if (this.toolbar && typeof (this.toolbar as any)[value] === "function") {
+                            (this.toolbar as any)[value]();
+                        }
+                    }
+                }
+            }
+            if (this.hasAttribute("auto-dismiss")) {
+                const menu = this.closest("forge-toolbar-menu") as ToolbarMenu;
+                if (menu) {
+                    menu.close();
                 }
             }
             console.log("Icon clicked:", this.getAttribute("action"));

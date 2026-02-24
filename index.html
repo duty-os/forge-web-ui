@@ -160,7 +160,7 @@
                     </clipPath>
                 </defs>
                 <g>
-                    <circle cx="9" cy="9" r="6" fill="red"/>
+                    <circle cx="9" cy="9" r="6" fill="var(--stroke-color, #FFC908)"/>
                     <path transform="scale(1.2), translate(1.45,1.45)" fill-rule="evenodd" clip-rule="evenodd" d="M9.06572 3.6499C9.29457 3.86529 9.31276 4.23349 9.10634 4.47229L5.86293 8.22455C5.54547 8.59181 4.99323 8.59182 4.67577 8.22455L3.14366 6.45208C2.93724 6.21328 2.95543 5.84508 3.18429 5.62969C3.41314 5.4143 3.766 5.43328 3.97242 5.67208L5.26935 7.17248L8.27758 3.6923C8.484 3.45349 8.83686 3.43451 9.06572 3.6499Z" fill="white"/>
                 </g>
             </svg>
@@ -179,10 +179,67 @@
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5986 11.4749C19.9419 11.7979 19.9691 12.3502 19.6595 12.7084L14.7944 18.3368C14.3182 18.8877 13.4898 18.8877 13.0136 18.3368L10.7155 15.6781C10.4059 15.3199 10.4331 14.7676 10.7764 14.4445C11.1197 14.1214 11.649 14.1499 11.9586 14.5081L13.904 16.7587L18.4164 11.5384C18.726 11.1802 19.2553 11.1518 19.5986 11.4749Z" fill="white"/>
             </svg>
         </forge-toolbar-asset>
+        <forge-toolbar-asset name="eraser-menu">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="16.918" y="20.1104" width="11.6667" height="11.9" rx="1.04495" transform="rotate(-135 16.918 20.1104)" fill="black" fill-opacity="0.8"/>
+                <path opacity="0.5" d="M12.6946 22.5007C11.8784 23.3169 10.5552 23.3169 9.73902 22.5007L6.27824 19.04C5.46208 18.2238 5.46208 16.9006 6.27824 16.0844L8.54027 13.8224L14.9566 20.2387L12.6946 22.5007Z" fill="black" fill-opacity="0.8"/>
+                <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="eraser-menu" active>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="16.918" y="20.1104" width="11.6667" height="11.9" rx="1.04495" transform="rotate(-135 16.918 20.1104)" fill="#4262FF" fill-opacity="0.8"/>
+                <path opacity="0.5" d="M12.6946 22.5007C11.8784 23.3169 10.5552 23.3169 9.73902 22.5007L6.27824 19.04C5.46208 18.2238 5.46208 16.9006 6.27824 16.0844L8.54027 13.8224L14.9566 20.2387L12.6946 22.5007Z" fill="#4262FF" fill-opacity="0.8"/>
+                <path d="M26.0667 27C26.5821 27 27 26.5821 27 26.0667V23L23 27H26.0667Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="eraser">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="16.918" y="20.1104" width="11.6667" height="11.9" rx="1.04495" transform="rotate(-135 16.918 20.1104)" fill="black" fill-opacity="0.8"/>
+                <path opacity="0.5" d="M12.6946 22.5007C11.8784 23.3169 10.5552 23.3169 9.73902 22.5007L6.27824 19.04C5.46208 18.2238 5.46208 16.9006 6.27824 16.0844L8.54027 13.8224L14.9566 20.2387L12.6946 22.5007Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="eraser" active>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="16.918" y="20.1104" width="11.6667" height="11.9" rx="1.04495" transform="rotate(-135 16.918 20.1104)" fill="#4262FF" fill-opacity="0.8"/>
+                <path opacity="0.5" d="M12.6946 22.5007C11.8784 23.3169 10.5552 23.3169 9.73902 22.5007L6.27824 19.04C5.46208 18.2238 5.46208 16.9006 6.27824 16.0844L8.54027 13.8224L14.9566 20.2387L12.6946 22.5007Z" fill="#4262FF" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="clear">
+            <svg width="28" height="28" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    <path d="M38 23.4156V18.1799C38 17.9354 37.8998 17.7009 37.7214 17.5281C37.543 17.3552 37.3011 17.2581 37.0488 17.2581H28.4809V10.9218C28.4809 10.6773 28.3807 10.4429 28.2023 10.27C28.0239 10.0971 27.782 10 27.5297 10H20.5159C20.2637 10 20.0217 10.0971 19.8434 10.27C19.665 10.4429 19.5648 10.6773 19.5648 10.9218V17.2599H10.9512C10.6989 17.2599 10.457 17.3571 10.2786 17.5299C10.1002 17.7028 10 17.9372 10 18.1817V23.4174H38V23.4156ZM35.7039 25.2591H12.2257L12.239 32.4085L11.3468 36.9031C11.3209 37.0364 11.3255 37.1737 11.3604 37.3051C11.3953 37.4365 11.4596 37.5589 11.5487 37.6636C11.6378 37.7682 11.7496 37.8526 11.8761 37.9108C12.0027 37.9689 12.1408 37.9994 12.2809 38H17.7576V32.0084C17.7576 31.764 17.8578 31.5295 18.0362 31.3566C18.2146 31.1838 18.4565 31.0866 18.7087 31.0866C18.961 31.0866 19.2029 31.1838 19.3813 31.3566C19.5597 31.5295 19.6599 31.764 19.6599 32.0084V38H23.0479V32.0084C23.0479 31.764 23.1481 31.5295 23.3265 31.3566C23.5049 31.1838 23.7468 31.0866 23.999 31.0866C24.2513 31.0866 24.4932 31.1838 24.6716 31.3566C24.85 31.5295 24.9502 31.764 24.9502 32.0084V38H28.3382V32.0084C28.3382 31.764 28.4384 31.5295 28.6168 31.3566C28.7952 31.1838 29.0371 31.0866 29.2894 31.0866C29.5416 31.0866 29.7835 31.1838 29.9619 31.3566C30.1403 31.5295 30.2405 31.764 30.2405 32.0084V38H35.761C35.9036 38.0006 36.0445 37.97 36.1732 37.9105C36.302 37.8511 36.4152 37.7643 36.5046 37.6566C36.594 37.5489 36.6571 37.4231 36.6895 37.2885C36.7218 37.1539 36.7224 37.014 36.6912 36.8791L35.702 32.5394V25.2591H35.7039Z" fill="var(--fcr_ui_scene_icontext1)"></path>
+                </g>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="undo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g opacity="0.3">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.46664 13.688C9.0309 11.9416 11.5043 10.2666 14.9333 10.2666C17.6286 10.2666 19.5423 11.3145 20.8144 12.6583C22.0615 13.9756 22.6716 15.5525 22.8539 16.6465C22.9387 17.1549 22.5952 17.6358 22.0868 17.7206C21.5783 17.8053 21.0974 17.4618 21.0127 16.9534C20.8839 16.1807 20.4206 14.9576 19.4588 13.9416C18.5221 12.9521 17.0914 12.1333 14.9333 12.1333C11.554 12.1333 9.28288 14.1728 8.11635 15.8666H11.2C11.7154 15.8666 12.1333 16.2845 12.1333 16.7999C12.1333 17.3154 11.7154 17.7333 11.2 17.7333H6.53331C6.01784 17.7333 5.59998 17.3154 5.59998 16.7999V11.6666C5.59998 11.1511 6.01784 10.7333 6.53331 10.7333C7.04878 10.7333 7.46664 11.1511 7.46664 11.6666V13.688Z" fill="black" fill-opacity="0.8"/>
+                </g>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="undo" active>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.46664 13.688C9.0309 11.9416 11.5043 10.2666 14.9333 10.2666C17.6286 10.2666 19.5423 11.3145 20.8144 12.6583C22.0615 13.9756 22.6716 15.5525 22.8539 16.6465C22.9387 17.1549 22.5952 17.6358 22.0868 17.7206C21.5783 17.8053 21.0974 17.4618 21.0127 16.9534C20.8839 16.1807 20.4206 14.9576 19.4588 13.9416C18.5221 12.9521 17.0914 12.1333 14.9333 12.1333C11.554 12.1333 9.28288 14.1728 8.11635 15.8666H11.2C11.7154 15.8666 12.1333 16.2845 12.1333 16.7999C12.1333 17.3154 11.7154 17.7333 11.2 17.7333H6.53331C6.01784 17.7333 5.59998 17.3154 5.59998 16.7999V11.6666C5.59998 11.1511 6.01784 10.7333 6.53331 10.7333C7.04878 10.7333 7.46664 11.1511 7.46664 11.6666V13.688Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="redo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g opacity="0.3">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5334 13.688C18.9691 11.9416 16.4957 10.2666 13.0667 10.2666C10.3714 10.2666 8.45772 11.3145 7.18556 12.6583C5.93846 13.9756 5.32838 15.5525 5.14606 16.6465C5.06131 17.1549 5.4048 17.6358 5.91325 17.7206C6.4217 17.8053 6.90258 17.4618 6.98732 16.9534C7.11611 16.1807 7.57936 14.9576 8.54115 13.9416C9.47788 12.9521 10.9086 12.1333 13.0667 12.1333C16.446 12.1333 18.7171 14.1728 19.8837 15.8666H16.8C16.2846 15.8666 15.8667 16.2845 15.8667 16.7999C15.8667 17.3154 16.2846 17.7333 16.8 17.7333H21.4667C21.9822 17.7333 22.4 17.3154 22.4 16.7999V11.6666C22.4 11.1511 21.9822 10.7333 21.4667 10.7333C20.9512 10.7333 20.5334 11.1511 20.5334 11.6666V13.688Z" fill="black" fill-opacity="0.8"/>
+                </g>
+            </svg>
+        </forge-toolbar-asset>
+        <forge-toolbar-asset name="redo" active>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5334 13.688C18.9691 11.9416 16.4957 10.2666 13.0667 10.2666C10.3714 10.2666 8.45772 11.3145 7.18556 12.6583C5.93846 13.9756 5.32838 15.5525 5.14606 16.6465C5.06131 17.1549 5.4048 17.6358 5.91325 17.7206C6.4217 17.8053 6.90258 17.4618 6.98732 16.9534C7.11611 16.1807 7.57936 14.9576 8.54115 13.9416C9.47788 12.9521 10.9086 12.1333 13.0667 12.1333C16.446 12.1333 18.7171 14.1728 19.8837 15.8666H16.8C16.2846 15.8666 15.8667 16.2845 15.8667 16.7999C15.8667 17.3154 16.2846 17.7333 16.8 17.7333H21.4667C21.9822 17.7333 22.4 17.3154 22.4 16.7999V11.6666C22.4 11.1511 21.9822 10.7333 21.4667 10.7333C20.9512 10.7333 20.5334 11.1511 20.5334 11.6666V13.688Z" fill="black" fill-opacity="0.8"/>
+            </svg>
+        </forge-toolbar-asset>
         <forge-toolbar-icon action="tool.laser" icon="laser"></forge-toolbar-icon>
         <forge-toolbar-icon action="tool.grab" icon="grab"></forge-toolbar-icon>
         <forge-toolbar-icon action="tool.selector" icon="selector"></forge-toolbar-icon>
-        <forge-toolbar-menu align="right" display-icon="curve">
+        <forge-toolbar-menu display-icon="curve">
             <forge-toolbar-icon match="tool.curve" icon="curve"></forge-toolbar-icon>
             <forge-toolbar-grid>
                 <forge-toolbar-grid-row>
@@ -199,7 +256,7 @@
                 </forge-toolbar-grid-row>
             </forge-toolbar-grid>
         </forge-toolbar-menu>
-        <forge-toolbar-menu align="right" display-icon="circle-menu">
+        <forge-toolbar-menu display-icon="circle-menu">
             <forge-toolbar-icon match="tool.menuShape" icon="circle-menu"></forge-toolbar-icon>
             <forge-toolbar-icon match="tool.menuShape" icon="rectangle-menu"></forge-toolbar-icon>
             <forge-toolbar-grid>
@@ -234,7 +291,18 @@
             </forge-toolbar-grid>
         </forge-toolbar-menu>
         <forge-toolbar-icon action="tool.text" icon="text"></forge-toolbar-icon>
-        <forge-toolbar-menu align="right" display-icon="palette">
+        <forge-toolbar-menu display-icon="eraser-menu">
+            <forge-toolbar-icon match="tool.eraser" icon="eraser-menu"></forge-toolbar-icon>
+            <forge-toolbar-grid>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon action="tool.eraser" icon="eraser"></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+                <forge-toolbar-grid-row>
+                    <forge-toolbar-icon action="call.clear" icon="clear" auto-dismiss></forge-toolbar-icon>
+                </forge-toolbar-grid-row>
+            </forge-toolbar-grid>
+        </forge-toolbar-menu>
+        <forge-toolbar-menu display-icon="palette">
             <forge-toolbar-icon icon="palette"></forge-toolbar-icon>
             <forge-toolbar-grid>
                 <forge-toolbar-grid-row>
@@ -257,6 +325,8 @@
                 </forge-toolbar-grid-row>
             </forge-toolbar-grid>
         </forge-toolbar-menu>
+        <forge-toolbar-icon match="undoable.true" action="call.undo" icon="undo" disable-active-background></forge-toolbar-icon>
+        <forge-toolbar-icon match="redoable.true" action="call.redo" icon="redo" disable-active-background></forge-toolbar-icon>
         <forge-drag-handle>
             <svg width="27" height="9" viewBox="0 0 27 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="1.5" cy="1.5" r="1.5" fill="black" fill-opacity="0.1"/>

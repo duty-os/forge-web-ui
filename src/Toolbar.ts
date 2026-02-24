@@ -16,7 +16,7 @@ export class Toolbar extends HTMLElement {
     private whiteboard: Whiteboard | null = null;
 
     static get observedAttributes() {
-        return ['align', 'direction', 'tool', 'stroke-width', 'stroke-color'];
+        return ['align', 'direction', 'tool', 'stroke-width', 'stroke-color', 'undoable', 'redoable'];
     }
 
     constructor() {
@@ -26,9 +26,6 @@ export class Toolbar extends HTMLElement {
         // Create style
         this.styleElement = document.createElement('style');
         this.styleElement.textContent = `
-            :host {
-                --stroke-color: red;
-            }
             div.container {
                 display: flex;
                 gap: 12px;
@@ -113,25 +110,25 @@ export class Toolbar extends HTMLElement {
                 z-index: 1000;
             }
             
-            div.menu-grid[data-align="right"] {
+            div.container[data-align="left"] div.menu-grid {
                 right: 0;
                 top: 50%;
                 transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%);
             }
             
-            div.menu-grid[data-align="left"] {
+            div.container[data-align="right"] div.menu-grid {
                 left: 0;
                 top: 50%;
                 transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%);
             }
             
-            div.menu-grid[data-align="top"] {
+            div.container[data-align="bottom"] div.menu-grid {
                 left: 50%;
                 top: 0;
                 transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px)));
             }
             
-            div.menu-grid[data-align="bottom"] {
+            div.container[data-align="top"] div.menu-grid {
                 left: 50%;
                 bottom: 0;
                 transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px)));
@@ -174,7 +171,7 @@ export class Toolbar extends HTMLElement {
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (oldValue === newValue) return;
 
-        if (name === 'tool' || name === 'stroke-width' || name === 'stroke-color') {
+        if (name === 'tool' || name === 'stroke-width' || name === 'stroke-color' || name === 'undoable' || name === 'redoable') {
             this.handleWhiteboardAttrUpdate();
         }
         if (name === 'direction') {
@@ -191,14 +188,38 @@ export class Toolbar extends HTMLElement {
         this.setAttribute("tool", whiteboard.tool);
         this.setAttribute("stroke-width", whiteboard.strokeWidth?.toString() ?? "1");
         this.setAttribute("stroke-color", whiteboard.strokeColor);
+        this.container.style.setProperty("--stroke-color", whiteboard.strokeColor);
+
+        this.setAttribute("undoable", "false");
+        this.setAttribute("redoable", "false");
+
+        whiteboard.addListener("undoStackLength", this.handleUndoStackChange);
+        whiteboard.addListener("redoStackLength", this.handleRedoStackChange);
 
         this.whiteboard = whiteboard;
     }
+
+    private handleRedoStackChange = (length: number) => {
+        if (length > 0) {
+            this.setAttribute("redoable", "true");
+        } else {
+            this.setAttribute("redoable", "false");
+        }
+    }
+
+    private handleUndoStackChange = (length: number) => {
+        if (length > 0) {
+            this.setAttribute("undoable", "true");
+        } else {
+            this.setAttribute("undoable", "false");
+        }
+    };
 
     private handleWhiteboardStyleUpdate = (style: ToolbarStyle) => {
         this.setAttribute("tool", style.tool);
         this.setAttribute("stroke-width", style.strokeWidth?.toString() ?? "1");
         this.setAttribute("stroke-color", style.strokeColor);
+        this.container.style.setProperty("--stroke-color", style.strokeColor);
     };
 
     public setCurrentTool(tool: WhiteboardToolType) {
@@ -216,6 +237,24 @@ export class Toolbar extends HTMLElement {
     public setStrokeColor(color: string) {
         if (this.whiteboard) {
             this.whiteboard.strokeColor = color;
+        }
+    }
+
+    public undo() {
+        if (this.whiteboard) {
+            this.whiteboard.undo();
+        }
+    }
+
+    public redo() {
+        if (this.whiteboard) {
+            this.whiteboard.redo();
+        }
+    }
+
+    public clear() {
+        if (this.whiteboard) {
+            this.whiteboard.clearPage();
         }
     }
 

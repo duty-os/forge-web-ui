@@ -90,7 +90,7 @@ class ToolbarMenu extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['align', 'display-icon'];
+        return ['display-icon'];
     }
 
     constructor() {
@@ -126,6 +126,12 @@ class ToolbarMenu extends HTMLElement {
         }
     };
 
+    public close() {
+        if (this.menuGrid) {
+            this.menuGrid.rootElement.removeAttribute("data-open");
+        }
+    }
+
     connectedCallback() {
         this.handleChildrenUpdate();
     }
@@ -133,11 +139,6 @@ class ToolbarMenu extends HTMLElement {
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         forgeElementReady().then(() => {
             if (oldValue === newValue) return;
-            if (name === 'align') {
-                if (this.menuGrid) {
-                    this.menuGrid.rootElement.setAttribute("data-align", newValue);
-                }
-            }
             if (name === 'display-icon') {
                 this.querySelectorAll("& > forge-toolbar-icon").forEach((icon) => {
                     if (icon.getAttribute("icon") === newValue) {
