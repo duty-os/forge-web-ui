@@ -142,7 +142,7 @@ class ToolbarMenu extends HTMLElement {
             if (name === 'display-icon') {
                 this.querySelectorAll("& > forge-toolbar-icon").forEach((icon) => {
                     if (icon.getAttribute("icon") === newValue) {
-                        const iconContainer = this.querySelector("[data-icon-container]");
+                        const iconContainer = this.rootElement.querySelector("[data-icon-container]");
                         if (iconContainer) {
                             iconContainer.replaceChildren();
                             iconContainer.appendChild((icon as ToolbarIcon).rootElement);
@@ -151,6 +151,16 @@ class ToolbarMenu extends HTMLElement {
                 });
             }
         });
+    }
+
+    public updateIcon() {
+        const displayIcon = Array.from(this.querySelectorAll("& > forge-toolbar-icon")).filter(icon => {
+            return (icon as ToolbarIcon).isActive
+        })[0];
+        const displayIconName = displayIcon?.getAttribute("icon")
+        if (displayIcon && displayIconName) {
+            this.setAttribute("display-icon", displayIconName);
+        }
     }
 
     private handleChildrenUpdate() {

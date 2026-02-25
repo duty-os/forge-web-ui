@@ -287,6 +287,9 @@ export class Toolbar extends HTMLElement {
             this.querySelectorAll("forge-toolbar-icon").forEach((icon: Element) => {
                 (icon as ToolbarIcon).updateImage();
             });
+            this.querySelectorAll("forge-toolbar-menu").forEach((menu: Element) => {
+                (menu as ToolbarMenu).updateIcon();
+            });
         });
     }
 

@@ -10,7 +10,7 @@ class ToolbarIcon extends HTMLElement {
         return this.closest('forge-toolbar') as Toolbar;
     }
 
-    private get _isActive(): boolean {
+    public get isActive(): boolean {
         if (!this.toolbar) { return false; }
         const match = this.getAttribute("match") || this.getAttribute("action");
         const predicates = match ? match.split(",").map(s => s.trim()) : [];
@@ -24,39 +24,46 @@ class ToolbarIcon extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['icon', 'action', 'theme', 'disable-active-background'];
+        return ['icon', 'action', 'theme', 'disable-active-background', 'match'];
     }
 
     constructor() {
         super();
         this.rootElement = document.createElement('div');
         this.rootElement.classList.add("toolbar-icon");
-        this.rootElement.addEventListener("click", this.handleClick);
+        this.rootElement.addEventListener("click", this.handleFirstAction);
+        this.rootElement.addEventListener("contextmenu", this.handleSecondaryAction);
     }
 
-    private  handleClick = (e: PointerEvent) => {
+    private handleSecondaryAction = (e: MouseEvent) => {
+        const action = this.getAttribute("secondary-action");
+        this.handleAction(action, e);
+    }
+
+    private handleFirstAction = (e: PointerEvent) => {
         const action = this.getAttribute("action");
+        this.handleAction(action, e);
+    };
+
+    private handleAction(action: string | null, e: Event) {
         if (action) {
             e.preventDefault();
             e.stopPropagation();
-            const action = this.getAttribute("action");
-            if (action) {
-                const attrs = action.split(",").map(s => s.trim());
-                for (const attr of attrs) {
-                    const [property, value] = attr.split(".");
-                    if (property === "tool") {
-                        this.toolbar?.setCurrentTool(value as any);
-                    }
-                    if (property === "stroke-width") {
-                        this.toolbar?.setStrokeWidth(parseInt(value));
-                    }
-                    if (property === "stroke-color") {
-                        this.toolbar?.setStrokeColor(value);
-                    }
-                    if (property === "call") {
-                        if (this.toolbar && typeof (this.toolbar as any)[value] === "function") {
-                            (this.toolbar as any)[value]();
-                        }
+            const attrs = action.split(",").map(s => s.trim());
+            for (const attr of attrs) {
+                const [property, value] = attr.split(".");
+                if (property === "tool") {
+                    this.toolbar?.setCurrentTool(value as any);
+                }
+                if (property === "stroke-width") {
+                    this.toolbar?.setStrokeWidth(parseInt(value));
+                }
+                if (property === "stroke-color") {
+                    this.toolbar?.setStrokeColor(value);
+                }
+                if (property === "call") {
+                    if (this.toolbar && typeof (this.toolbar as any)[value] === "function") {
+                        (this.toolbar as any)[value]();
                     }
                 }
             }
@@ -66,9 +73,9 @@ class ToolbarIcon extends HTMLElement {
                     menu.close();
                 }
             }
-            console.log("Icon clicked:", this.getAttribute("action"));
+            console.log("Icon clicked:", action);
         }
-    };
+    }
 
     connectedCallback() {
         this.updateImage();
@@ -97,8 +104,7 @@ class ToolbarIcon extends HTMLElement {
                 return;
             }
             const {regular, active} = this.toolbar.getAssetByName(assetName);
-
-            if (this._isActive) {
+            if (this.isActive) {
                 if (active) {
                     this.rootElement.replaceChildren();
                     this.rootElement.appendChild(active.rootElement);
@@ -114,6 +120,10 @@ class ToolbarIcon extends HTMLElement {
                     console.warn(`[ForgeToolbar] Regular asset not found for icon: ${assetName}`);
                 }
                 this.rootElement.setAttribute("data-active", "false");
+            }
+            const themeValue = this.getAttribute("theme");
+            if (themeValue) {
+                this.rootElement.style.setProperty("--theme-color", themeValue);
             }
         });
     }
