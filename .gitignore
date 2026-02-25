@@ -1,3 +1,16 @@
+# Dependencies
 /node_modules/
+
+# IDE
 /.idea/
-/src/config.local.ts
+
+# Build outputs
+/dist/
+/demo-dist/
+
+# Local config (包含敏感信息)
+**/config.local.ts
+/demo/config.local.ts
+
+# OS
+.DS_Store

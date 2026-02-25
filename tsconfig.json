@@ -11,7 +11,11 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+
+    /* Declaration - 只生成类型声明，JS 由 Vite 生成 */
+    "declaration": true,
+    "declarationDir": "./dist",
+    "emitDeclarationOnly": true,
 
     /* Linting */
     "strict": true,

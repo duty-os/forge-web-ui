@@ -1,14 +1,30 @@
 {
   "name": "forge-web-ui",
   "version": "1.0.0",
-  "description": "",
+  "description": "A lightweight Web Components toolbar library for whiteboard applications",
   "type": "module",
+  "main": "./dist/forge-web-ui.umd.js",
+  "module": "./dist/forge-web-ui.es.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --config vite.config.dev.ts",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build:types": "tsc --emitDeclarationOnly",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "web-components",
+    "toolbar",
+    "whiteboard",
+    "custom-elements",
+    "forge",
+    "netless"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -21,5 +37,8 @@
     "@netless/forge-rtm": "^1.1.1",
     "@netless/forge-whiteboard": "^1.1.1",
     "agora-rtm": "2.2.3-2"
+  },
+  "peerDependencies": {
+    "@netless/forge-whiteboard": "^1.1.1"
   }
 }

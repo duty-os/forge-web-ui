@@ -6,12 +6,13 @@ import AGORA_RTM from "agora-rtm";
 
 import { config } from "./config.local.ts";
 
-import "./Toolbar.ts";
-import "./ToolbarAsset.ts";
-import "./ToolbarIcon.ts";
-import "./ToolbarMenu.ts";
-import "./DragHandle.ts";
-import {Toolbar} from "./Toolbar.ts";
+// 导入所有工具栏组件
+import "../src/Toolbar.ts";
+import "../src/ToolbarAsset.ts";
+import "../src/ToolbarIcon.ts";
+import "../src/ToolbarMenu.ts";
+import "../src/DragHandle.ts";
+import {Toolbar} from "../src/Toolbar.ts";
 
 
 (async function main() {
