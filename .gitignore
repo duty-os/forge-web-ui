@@ -17,3 +17,4 @@ demo/react/config.local.ts
 
 # OS
 .DS_Store
+/demo/react/node_modules/
