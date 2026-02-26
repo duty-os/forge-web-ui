@@ -1,0 +1,27 @@
+{
+  "name": "@forge-web-ui/demo-react",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@netless/forge-web-ui": "workspace:*",
+    "@netless/forge-room": "^1.1.1",
+    "@netless/forge-rtm": "^1.1.1",
+    "@netless/forge-whiteboard": "^1.1.1",
+    "agora-rtm": "2.2.3-2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  }
+}

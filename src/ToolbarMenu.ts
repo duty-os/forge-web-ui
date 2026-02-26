@@ -207,4 +207,4 @@ if (!customElements.get('forge-toolbar-grid-divider')) {
     customElements.define('forge-toolbar-grid-divider', ToolbarGridDivider);
 }
 
-export { ToolbarMenu, ToolbarGrid, ToolbarGridRow };
+export { ToolbarMenu, ToolbarGrid, ToolbarGridRow, ToolbarGridDivider };

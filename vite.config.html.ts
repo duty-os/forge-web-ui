@@ -3,14 +3,14 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   // 开发服务器配置
   server: {
-    port: 3000,
+    port: 3301,
     open: true
   },
   // 构建配置
   build: {
-    outDir: 'demo-dist',
+    outDir: 'demo-html',
     sourcemap: true
   },
   // 指向 demo 目录作为根目录
-  root: 'demo'
+  root: 'demo/html'
 })

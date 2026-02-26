@@ -1,5 +1,6 @@
 # Dependencies
 /node_modules/
+demo/node_modules/
 
 # IDE
 /.idea/
@@ -9,8 +10,10 @@
 /demo-dist/
 
 # Local config (包含敏感信息)
-**/config.local.ts
+demo/config.local.ts
 /demo/config.local.ts
+demo/react/config.local.ts
+/demo/react/config.local.ts
 
 # OS
 .DS_Store

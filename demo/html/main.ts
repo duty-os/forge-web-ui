@@ -4,15 +4,15 @@ import { WhiteboardApplication } from "@netless/forge-whiteboard";
 
 import AGORA_RTM from "agora-rtm";
 
-import { config } from "./config.local.ts";
+import { config } from "../config.local.ts";
 
 // 导入所有工具栏组件
-import "../src/Toolbar.ts";
-import "../src/ToolbarAsset.ts";
-import "../src/ToolbarIcon.ts";
-import "../src/ToolbarMenu.ts";
-import "../src/DragHandle.ts";
-import {Toolbar} from "../src/Toolbar.ts";
+import "../../src/Toolbar.ts";
+import "../../src/ToolbarAsset.ts";
+import "../../src/ToolbarIcon.ts";
+import "../../src/ToolbarMenu.ts";
+import "../../src/DragHandle.ts";
+import {Toolbar} from "../../src";
 
 
 (async function main() {
