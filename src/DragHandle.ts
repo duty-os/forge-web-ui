@@ -143,8 +143,6 @@ class DragHandle extends HTMLElement {
             const newX = currentX * 0.8;
             const newY = currentY * 0.8;
 
-            console.log("[][][]", newX, newY);
-
             if (Math.abs(newX) < 0.5 && Math.abs(newY) < 0.5) {
                 // Animation complete, reset to 0
                 this.toolbar!.style.setProperty('--drag-offset-x', '0px');

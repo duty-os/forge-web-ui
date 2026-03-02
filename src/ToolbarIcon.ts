@@ -33,6 +33,21 @@ class ToolbarIcon extends HTMLElement {
         this.rootElement.classList.add("toolbar-icon");
         this.rootElement.addEventListener("click", this.handleFirstAction);
         this.rootElement.addEventListener("contextmenu", this.handleSecondaryAction);
+
+        const eventsToProxy = [
+            'click', 'dblclick', 'mousedown', 'mouseup', 'mouseenter', 'mouseleave',
+            'mouseover', 'mouseout', 'mousemove', 'contextmenu', 'keydown', 'keyup',
+            'keypress', 'focus', 'blur', 'touchstart', 'touchend', 'touchmove'
+        ];
+        eventsToProxy.forEach(eventName => {
+            this.rootElement.addEventListener(eventName, (e: Event) => {
+                e.preventDefault();
+                this.dispatchEvent(new (e.constructor as any)(e.type, e));
+            });
+        });
+
+        const shadow = this.attachShadow({ mode: 'closed' });
+        shadow.appendChild(document.createElement("div"));
     }
 
     private handleSecondaryAction = (e: MouseEvent) => {

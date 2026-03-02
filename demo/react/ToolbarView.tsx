@@ -1,9 +1,20 @@
 import '@netless/forge-web-ui';
+import {MouseEvent, useCallback} from "react";
+
+const paletteColors = [
+    ['#E2E2E2', '#A1C473', '#FFC908', '#CC3100'],
+    ['#968D86', '#4262FF', '#51BD69', '#FF86C9'],
+    ['#0E0E0E', '#50E3C2', '#FC3141', '#7740EC'],
+];
 
 export function ToolbarView() {
+
+    const addPreferenceColor = useCallback((color: string) => {
+        console.log("addPreferenceColor ", color);
+    }, []);
+
     return (
         <forge-toolbar align="right" id="forge-toolbar" direction="vertical">
-            <divv ></divv>
             <forge-toolbar-asset name="curve">
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd"
@@ -370,36 +381,24 @@ export function ToolbarView() {
             <forge-toolbar-menu display-icon="palette">
                 <forge-toolbar-icon icon="palette"></forge-toolbar-icon>
                 <forge-toolbar-grid>
-                    <forge-toolbar-grid-row>
-                        <forge-toolbar-icon action="stroke-color.#E2E2E2" icon="palette-icon" theme="#E2E2E2"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#A1C473" icon="palette-icon" theme="#A1C473"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#FFC908" icon="palette-icon" theme="#FFC908"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#CC3100" icon="palette-icon" theme="#CC3100"
-                                            disable-active-background></forge-toolbar-icon>
-                    </forge-toolbar-grid-row>
-                    <forge-toolbar-grid-row>
-                        <forge-toolbar-icon action="stroke-color.#968D86" icon="palette-icon" theme="#968D86"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#4262FF" icon="palette-icon" theme="#4262FF"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#51BD69" icon="palette-icon" theme="#51BD69"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#FF86C9" icon="palette-icon" theme="#FF86C9"
-                                            disable-active-background></forge-toolbar-icon>
-                    </forge-toolbar-grid-row>
-                    <forge-toolbar-grid-row>
-                        <forge-toolbar-icon action="stroke-color.#0E0E0E" icon="palette-icon" theme="#0E0E0E"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#50E3C2" icon="palette-icon" theme="#50E3C2"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#FC3141" icon="palette-icon" theme="#FC3141"
-                                            disable-active-background></forge-toolbar-icon>
-                        <forge-toolbar-icon action="stroke-color.#7740EC" icon="palette-icon" theme="#7740EC"
-                                            disable-active-background></forge-toolbar-icon>
-                    </forge-toolbar-grid-row>
+                    {paletteColors.map((row, rowIndex) => (
+                        <forge-toolbar-grid-row key={rowIndex}>
+                            {row.map((color) => (
+                                <forge-toolbar-icon
+                                    key={color}
+                                    action={`stroke-color.${color}`}
+                                    icon="palette-icon"
+                                    theme={color}
+                                    onContextMenu={(evt: MouseEvent) => {
+                                        console.log("right click color", color);
+                                        evt.preventDefault();
+                                        addPreferenceColor(color)
+                                    }}
+                                    disable-active-background
+                                />
+                            ))}
+                        </forge-toolbar-grid-row>
+                    ))}
                 </forge-toolbar-grid>
             </forge-toolbar-menu>
             <forge-toolbar-icon match="undoable.true" action="call.undo" icon="undo"

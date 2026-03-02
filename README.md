@@ -347,6 +347,7 @@ npm run dev
 |--------|--------|------|
 | `--forge-menu-align-gap` | `12px` (right), `-12px` (left) | 工具栏距离对齐边缘的间距 |
 | `--forge-menu-pop-gap` | `12px` | 菜单弹出时与工具栏的间距 |
+| `--forge-menu-animation-from-scale` | `0.95` | 菜单动画初始缩放值（0.95 = 从 95% 缩放到 100%） |
 | `--stroke-color` | - | 当前笔画颜色（动态设置） |
 | `--theme-color` | - | 主题颜色（用于图标） |
 | `--drag-offset-x` | `0px` | 拖拽时的 X 轴偏移（内部使用） |
@@ -355,14 +356,33 @@ npm run dev
 #### 自定义示例
 
 ```css
+/* 全局设置 */
 :root {
     --forge-menu-pop-gap: 16px;
+    /* 更明显的缩放动画效果 */
+    --forge-menu-animation-from-scale: 0.85;
 }
 
+/* 单个工具栏设置 */
 forge-toolbar {
     --forge-menu-align-gap: 20px;
+    /* 更轻微的缩放效果 */
+    --forge-menu-animation-from-scale: 0.98;
+}
+
+/* 放大效果（从大于 1 开始） */
+forge-toolbar.toolbar-with-zoom-in {
+    --forge-menu-animation-from-scale: 1.05;
 }
 ```
+
+**菜单动画效果说明：**
+
+- **默认值 0.95**：菜单从 95% 缩放到 100%，产生轻微的放大效果
+- **小于 1（如 0.85）**：更明显的放大弹出效果
+- **接近 1（如 0.98）**：更轻微的缩放效果
+- **大于 1（如 1.05）**：从放大缩小到正常尺寸的效果
+- **等于 1**：禁用缩放动画，仅保留淡入淡出效果
 
 ---
 
