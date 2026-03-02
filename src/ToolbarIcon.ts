@@ -32,27 +32,37 @@ class ToolbarIcon extends HTMLElement {
         this.rootElement = document.createElement('div');
         this.rootElement.classList.add("toolbar-icon");
         this.rootElement.addEventListener("click", this.handleFirstAction);
-        this.rootElement.addEventListener("contextmenu", this.handleSecondaryAction);
 
-        const eventsToProxy = [
-            'click', 'dblclick', 'mousedown', 'mouseup', 'mouseenter', 'mouseleave',
-            'mouseover', 'mouseout', 'mousemove', 'contextmenu', 'keydown', 'keyup',
-            'keypress', 'focus', 'blur', 'touchstart', 'touchend', 'touchmove'
-        ];
-        eventsToProxy.forEach(eventName => {
-            this.rootElement.addEventListener(eventName, (e: Event) => {
-                e.preventDefault();
-                this.dispatchEvent(new (e.constructor as any)(e.type, e));
-            });
-        });
+        const style = document.createElement('style');
+        style.innerHTML = `
+            div.toolbar-icon {
+                display: inline-block;
+                width: 34px;
+                height: 34px;
+                cursor: pointer;
+                border-radius: 4px;
+                transition: background-color 0.2s;
+                box-sizing: border-box;
+                object-fit: contain;
+            }
+            
+            div.toolbar-icon > svg {
+                width: 100%;
+                height: 100%;
+            }
+
+            div.toolbar-icon[data-active="true"] {
+                background-color: #4262FF1a;
+            }
+            
+            div.toolbar-icon[data-disable-active-background] {
+                background-color: transparent !important;
+            }
+        `;
 
         const shadow = this.attachShadow({ mode: 'closed' });
-        shadow.appendChild(document.createElement("div"));
-    }
-
-    private handleSecondaryAction = (e: MouseEvent) => {
-        const action = this.getAttribute("secondary-action");
-        this.handleAction(action, e);
+        shadow.appendChild(style);
+        shadow.appendChild(this.rootElement);
     }
 
     private handleFirstAction = (e: PointerEvent) => {

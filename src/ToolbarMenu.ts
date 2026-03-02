@@ -22,25 +22,9 @@ class ToolbarGridRow extends HTMLElement {
         super();
         this.rootElement = document.createElement('div');
         this.rootElement.classList.add("menu-grid-row");
-    }
-
-    connectedCallback() {
-        this.handleChildrenUpdate();
-    }
-
-    private handleChildrenUpdate() {
-        this.rootElement.replaceChildren();
-        for (const child of Array.from(this.children)) {
-            if (child.tagName.toLowerCase() === "forge-toolbar-icon") {
-                const icon = child as ToolbarIcon;
-                if (icon.rootElement) {
-                    this.rootElement.appendChild(icon.rootElement);
-                }
-            }
-            if (child.tagName.toLowerCase() === "forge-toolbar-menu") {
-                this.rootElement.appendChild((child as ToolbarMenu).rootElement);
-            }
-        }
+        const shadow = this.attachShadow({ mode: 'closed' });
+        this.rootElement.appendChild(document.createElement("slot"));
+        shadow.appendChild(this.rootElement);
     }
 }
 
@@ -51,24 +35,9 @@ class ToolbarGrid extends HTMLElement {
         super();
         this.rootElement = document.createElement('div');
         this.rootElement.classList.add("menu-grid");
-    }
-
-    connectedCallback() {
-        this.handleChildrenUpdate();
-    }
-
-    private handleChildrenUpdate() {
-        forgeElementReady().then(() => {
-            this.rootElement.replaceChildren();
-            for (const child of Array.from(this.children)) {
-                if (child.tagName.toLowerCase() === "forge-toolbar-grid-row") {
-                    this.rootElement.appendChild((child as ToolbarGridRow).rootElement);
-                }
-                if (child.tagName.toLowerCase() === "forge-toolbar-grid-divider") {
-                    this.rootElement.appendChild((child as ToolbarGridDivider).rootElement);
-                }
-            }
-        });
+        const shadow = this.attachShadow({ mode: 'closed' });
+        this.rootElement.appendChild(document.createElement("slot"));
+        shadow.appendChild(this.rootElement);
     }
 }
 
@@ -105,6 +74,98 @@ class ToolbarMenu extends HTMLElement {
                 }
             });
         }, { capture: true });
+
+        const style = document.createElement("style");
+        style.innerHTML = `
+             div.menu-grid {
+                position: absolute;
+                visibility: hidden;
+                opacity: 0;
+                background: white;
+                padding: 12px;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+                pointer-events: none;
+            }
+            
+            div.menu-container {
+                position: relative;
+                display: inline-block;
+            }
+            
+            div.menu-grid[data-open] {
+                visibility: visible;
+                opacity: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                pointer-events: auto;
+            }
+
+            .menu-container[data-toolbar-align="left"] div.menu-grid[data-open] {
+                transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%) scale(1);
+            }
+
+            .menu-container[data-toolbar-align="right"] div.menu-grid[data-open] {
+                transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%) scale(1);
+            }
+
+            .menu-container[data-toolbar-align="bottom"] div.menu-grid[data-open] {
+                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px))) scale(1);
+            }
+
+            .menu-container[data-toolbar-align="top"] div.menu-grid[data-open] {
+                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px))) scale(1);
+            }
+
+            div.menu-grid-row {
+                display: flex;
+                gap: 8px;
+            }
+            
+            div.menu-grid-divider {
+                width: 100%;
+                height: 1px;
+                background-color: #e0e0e0;
+                margin: 4px 0;
+            }
+            
+            .menu-container[data-toolbar-align="right"] div.menu-grid {
+                left: 0;
+                top: 50%;
+                transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%) scale(var(--forge-menu-animation-from-scale, 0.95));
+            }
+            .menu-container[data-toolbar-align="left"] div.menu-grid {
+                right: 0;
+                top: 50%;
+                transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%) scale(var(--forge-menu-animation-from-scale, 0.95));
+            }
+
+            .menu-container[data-toolbar-align="bottom"] div.menu-grid {
+                left: 50%;
+                top: 0;
+                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px))) scale(var(--forge-menu-animation-from-scale, 0.95));
+            }
+
+            .menu-container[data-toolbar-align="top"] div.menu-grid {
+                left: 50%;
+                bottom: 0;
+                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px))) scale(var(--forge-menu-animation-from-scale, 0.95));
+            }
+        `;
+
+        const iconContainer = document.createElement("div");
+        iconContainer.setAttribute("data-icon-container", "");
+        const iconSlot = document.createElement("slot");
+        iconSlot.setAttribute("name", "icon");
+        iconContainer.appendChild(iconSlot);
+        this.rootElement.appendChild(iconContainer);
+
+        const shadow = this.attachShadow({ mode: 'closed' });
+        shadow.appendChild(style);
+        shadow.appendChild(this.rootElement);
     }
 
     private toggle = () => {
@@ -140,17 +201,22 @@ class ToolbarMenu extends HTMLElement {
         forgeElementReady().then(() => {
             if (oldValue === newValue) return;
             if (name === 'display-icon') {
-                this.querySelectorAll("& > forge-toolbar-icon").forEach((icon) => {
-                    if (icon.getAttribute("icon") === newValue) {
-                        const iconContainer = this.rootElement.querySelector("[data-icon-container]");
-                        if (iconContainer) {
-                            iconContainer.replaceChildren();
-                            iconContainer.appendChild((icon as ToolbarIcon).rootElement);
-                        }
-                    }
-                });
+                this.refreshActiveIcon(newValue);
             }
         });
+    }
+
+    private refreshActiveIcon(displayIconName: string) {
+        const iconContainer = this.rootElement.querySelector("[data-icon-container]");
+        if (iconContainer) {
+            this.querySelectorAll("& > forge-toolbar-icon").forEach((icon: any) => {
+                if (icon.getAttribute("icon") === displayIconName) {
+                    icon.style.display = "block";
+                } else {
+                    icon.style.display = "none";
+                }
+            });
+        }
     }
 
     public updateIcon() {
@@ -163,28 +229,19 @@ class ToolbarMenu extends HTMLElement {
         }
     }
 
+    public updateToolbarAlign(align: string) {
+        this.rootElement.setAttribute("data-toolbar-align", align);
+
+    }
+
     private handleChildrenUpdate() {
         forgeElementReady().then(() => {
-            this.rootElement.replaceChildren();
-            const iconContainer = document.createElement("div");
-            iconContainer.setAttribute("data-icon-container", "");
-            this.rootElement.appendChild(iconContainer);
-            let isGridAdded = false;
-            for (const child of Array.from(this.children)) {
-                if (child.tagName.toLowerCase() === "forge-toolbar-icon" && this.getAttribute("display-icon") === child.getAttribute("icon")) {
-                    const icon = child as ToolbarIcon;
-                    if (icon.rootElement) {
-                        iconContainer.appendChild(icon.rootElement);
-                    }
-                }
-                if (child.tagName.toLowerCase() === "forge-toolbar-grid") {
-                    if (isGridAdded) {
-                        console.warn("Multiple <forge-toolbar-grid> elements found inside <forge-toolbar-menu>. Only the first one will be used.");
-                        continue;
-                    }
-                    isGridAdded = true;
-                    this.rootElement.appendChild((child as ToolbarGrid).rootElement);
-                }
+            this.querySelectorAll("&>forge-toolbar-icon").forEach(icon => {
+                icon.setAttribute("slot", "icon");
+            });
+            const displayIcon = this.getAttribute("display-icon");
+            if (displayIcon) {
+                this.refreshActiveIcon(displayIcon);
             }
         });
     }

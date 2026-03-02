@@ -4,7 +4,7 @@ import type { ToolbarIcon } from './ToolbarIcon';
 import type { ToolbarMenu } from "./ToolbarMenu.ts";
 import type { ToolbarAsset } from "./ToolbarAsset.ts";
 import { forgeElementReady } from "./utils.ts";
-import {DragHandle} from "./DragHandle.ts";
+// import {DragHandle} from "./DragHandle.ts";
 
 export class Toolbar extends HTMLElement {
 
@@ -70,114 +70,12 @@ export class Toolbar extends HTMLElement {
             div.container[data-direction="horizontal"] {
                 flex-direction: row;
             }
-            
-            div.toolbar-icon {
-                display: inline-block;
-                width: 34px;
-                height: 34px;
-                cursor: pointer;
-                border-radius: 4px;
-                transition: background-color 0.2s;
-                box-sizing: border-box;
-                object-fit: contain;
-            }
-            
-            div.toolbar-icon > svg {
-                width: 100%;
-                height: 100%;
-            }
-
-            div.toolbar-icon[data-active="true"] {
-                background-color: #4262FF1a;
-            }
-            
-            div.toolbar-icon[data-disable-active-background] {
-                background-color: transparent !important;
-            }
-            
-            div.menu-container {
-                position: relative;
-                display: inline-block;
-            }
-            
-            div.menu-grid {
-                position: absolute;
-                visibility: hidden;
-                opacity: 0;
-                background: white;
-                padding: 12px;
-                border-radius: 8px;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-                z-index: 1000;
-                transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-                pointer-events: none;
-            }
-
-            div.container[data-align="left"] div.menu-grid {
-                right: 0;
-                top: 50%;
-                transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%) scale(var(--forge-menu-animation-from-scale, 0.95));
-            }
-
-            div.container[data-align="right"] div.menu-grid {
-                left: 0;
-                top: 50%;
-                transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%) scale(var(--forge-menu-animation-from-scale, 0.95));
-            }
-
-            div.container[data-align="bottom"] div.menu-grid {
-                left: 50%;
-                top: 0;
-                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px))) scale(var(--forge-menu-animation-from-scale, 0.95));
-            }
-
-            div.container[data-align="top"] div.menu-grid {
-                left: 50%;
-                bottom: 0;
-                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px))) scale(var(--forge-menu-animation-from-scale, 0.95));
-            }
-
-            div.menu-grid[data-open] {
-                visibility: visible;
-                opacity: 1;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                pointer-events: auto;
-            }
-
-            div.container[data-align="left"] div.menu-grid[data-open] {
-                transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%) scale(1);
-            }
-
-            div.container[data-align="right"] div.menu-grid[data-open] {
-                transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%) scale(1);
-            }
-
-            div.container[data-align="bottom"] div.menu-grid[data-open] {
-                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px))) scale(1);
-            }
-
-            div.container[data-align="top"] div.menu-grid[data-open] {
-                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px))) scale(1);
-            }
-
-            div.menu-grid-row {
-                display: flex;
-                gap: 8px;
-            }
-            
-            div.menu-grid-divider {
-                width: 100%;
-                height: 1px;
-                background-color: #e0e0e0;
-                margin: 4px 0;
-            }
         `;
 
         this.shadow.appendChild(this.styleElement);
         this.container = document.createElement('div');
         this.container.classList.add('container');
+        this.container.appendChild(document.createElement("slot"));
         this.shadow.appendChild(this.container);
         this.ovserver = new MutationObserver(() => this.connectedCallback());
         this.ovserver.observe(this, {
@@ -191,17 +89,22 @@ export class Toolbar extends HTMLElement {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        if (oldValue === newValue) return;
+        forgeElementReady().then(() => {
+            if (oldValue === newValue) return;
 
-        if (name === 'tool' || name === 'stroke-width' || name === 'stroke-color' || name === 'undoable' || name === 'redoable') {
-            this.handleWhiteboardAttrUpdate();
-        }
-        if (name === 'direction') {
-            this.container.setAttribute('data-direction', newValue);
-        }
-        if (name === 'align') {
-            this.container.setAttribute('data-align', newValue);
-        }
+            if (name === 'tool' || name === 'stroke-width' || name === 'stroke-color' || name === 'undoable' || name === 'redoable') {
+                this.handleWhiteboardAttrUpdate();
+            }
+            if (name === 'direction') {
+                this.container.setAttribute('data-direction', newValue);
+            }
+            if (name === 'align') {
+                this.container.setAttribute('data-align', newValue);
+                this.querySelectorAll("forge-toolbar-menu").forEach(menu => {
+                    (menu as ToolbarMenu).updateToolbarAlign(newValue);
+                });
+            }
+        });
     }
 
     public connectWhiteboard(whiteboard: Whiteboard) {
@@ -282,23 +185,14 @@ export class Toolbar extends HTMLElement {
 
     private handleChildrenUpdate() {
         forgeElementReady().then(() => {
-            this.container.replaceChildren();
             this.assets = [];
             for (const child of Array.from(this.children)) {
                 if (!customElements.get(child.tagName.toLowerCase())) {
                     continue;
                 }
-                if (child.tagName.toLowerCase() === "forge-toolbar-icon") {
-                    this.container.appendChild((child as ToolbarIcon).rootElement);
-                }
-                if (child.tagName.toLowerCase() === "forge-toolbar-menu") {
-                    this.container.appendChild((child as ToolbarMenu).rootElement);
-                }
                 if (child.tagName.toLowerCase() === "forge-toolbar-asset") {
                     this.assets.push(child as ToolbarAsset);
-                }
-                if (child.tagName.toLowerCase() === "forge-drag-handle") {
-                    this.container.appendChild((child as DragHandle).rootElement);
+                    child.remove();
                 }
             }
         });
