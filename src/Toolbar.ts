@@ -11,8 +11,6 @@ export class Toolbar extends HTMLElement {
     private readonly shadow: ShadowRoot;
     private readonly container: HTMLDivElement;
     private readonly styleElement: HTMLStyleElement;
-    private readonly ovserver: MutationObserver;
-    private assets: Array<ToolbarAsset>;
     private whiteboard: Whiteboard | null = null;
 
     static get observedAttributes() {
@@ -21,7 +19,6 @@ export class Toolbar extends HTMLElement {
 
     constructor() {
         super();
-        this.assets = [];
         this.shadow = this.attachShadow({ mode: 'closed' });
         // Create style
         this.styleElement = document.createElement('style');
@@ -77,14 +74,9 @@ export class Toolbar extends HTMLElement {
         this.container.classList.add('container');
         this.container.appendChild(document.createElement("slot"));
         this.shadow.appendChild(this.container);
-        this.ovserver = new MutationObserver(() => this.connectedCallback());
-        this.ovserver.observe(this, {
-            childList: true
-        });
     }
 
     connectedCallback() {
-        this.handleChildrenUpdate();
         this.handleWhiteboardAttrUpdate();
     }
 
@@ -183,21 +175,6 @@ export class Toolbar extends HTMLElement {
         }
     }
 
-    private handleChildrenUpdate() {
-        forgeElementReady().then(() => {
-            this.assets = [];
-            for (const child of Array.from(this.children)) {
-                if (!customElements.get(child.tagName.toLowerCase())) {
-                    continue;
-                }
-                if (child.tagName.toLowerCase() === "forge-toolbar-asset") {
-                    this.assets.push(child as ToolbarAsset);
-                    child.remove();
-                }
-            }
-        });
-    }
-
     private handleWhiteboardAttrUpdate() {
         forgeElementReady().then(() => {
             this.querySelectorAll("forge-toolbar-icon").forEach((icon: Element) => {
@@ -210,8 +187,9 @@ export class Toolbar extends HTMLElement {
     }
 
     public getAssetByName(name: string): { regular: ToolbarAsset | null, active: ToolbarAsset | null } {
-        const regular = this.assets.find(asset => asset.getAttribute('name') === name && !asset.hasAttribute('active'));
-        const active = this.assets.find(asset => asset.getAttribute('name') === name && asset.hasAttribute('active'));
+        const assets = Array.from(this.querySelectorAll("forge-toolbar-asset"));
+        const regular = assets.find(asset => asset.getAttribute('name') === name && !asset.hasAttribute('active'));
+        const active = assets.find(asset => asset.getAttribute('name') === name && asset.hasAttribute('active'));
         return { regular: regular ?? null, active: active ?? regular ?? null };
     }
 }

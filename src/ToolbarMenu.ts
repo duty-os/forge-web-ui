@@ -5,12 +5,23 @@ import type { Toolbar } from "./Toolbar.ts";
 
 class ToolbarGridDivider extends HTMLElement {
 
-    public readonly rootElement: HTMLDivElement;
-
     constructor() {
         super();
-        this.rootElement = document.createElement('div');
-        this.rootElement.classList.add("menu-grid-divider");
+
+        const style = document.createElement("style");
+        style.innerHTML = `
+            div.menu-grid-divider {
+                height: 1px;
+                background-color: #e0e0e0;
+                margin: 4px 0;
+            }
+        `;
+
+        const shadow = this.attachShadow({ mode: 'closed' });
+        const rootElement = document.createElement('div');
+        rootElement.classList.add("menu-grid-divider");
+        shadow.appendChild(style);
+        shadow.appendChild(rootElement);
     }
 }
 
@@ -24,6 +35,16 @@ class ToolbarGridRow extends HTMLElement {
         this.rootElement.classList.add("menu-grid-row");
         const shadow = this.attachShadow({ mode: 'closed' });
         this.rootElement.appendChild(document.createElement("slot"));
+
+        const style = document.createElement("style");
+        style.innerHTML = `
+            div.menu-grid-row {
+                display: flex;
+                gap: 8px;
+            }
+        `;
+
+        shadow.appendChild(style);
         shadow.appendChild(this.rootElement);
     }
 }
@@ -37,6 +58,71 @@ class ToolbarGrid extends HTMLElement {
         this.rootElement.classList.add("menu-grid");
         const shadow = this.attachShadow({ mode: 'closed' });
         this.rootElement.appendChild(document.createElement("slot"));
+
+        const style = document.createElement("style");
+        style.innerHTML = `
+            div.menu-grid {
+                position: absolute;
+                visibility: hidden;
+                opacity: 0;
+                background: white;
+                padding: 12px;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+                pointer-events: none;
+            }
+            
+            div.menu-grid[data-open] {
+                visibility: visible;
+                opacity: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                pointer-events: auto;
+            }
+            
+            div.menu-grid[data-open][data-toolbar-align="left"] {
+                transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%) scale(1);
+            }
+
+            div.menu-grid[data-open][data-toolbar-align="right"] {
+                transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%) scale(1);
+            }
+
+            div.menu-grid[data-open][data-toolbar-align="bottom"] {
+                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px))) scale(1);
+            }
+
+            div.menu-grid[data-open][data-toolbar-align="top"] {
+                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px))) scale(1);
+            }
+            
+            div.menu-grid[data-toolbar-align="right"] {
+                left: 0;
+                top: 50%;
+                transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%) scale(var(--forge-menu-animation-from-scale, 0.95));
+            }
+            div.menu-grid[data-toolbar-align="left"] {
+                right: 0;
+                top: 50%;
+                transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%) scale(var(--forge-menu-animation-from-scale, 0.95));
+            }
+
+            div.menu-grid[data-toolbar-align="bottom"] {
+                left: 50%;
+                top: 0;
+                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px))) scale(var(--forge-menu-animation-from-scale, 0.95));
+            }
+
+            div.menu-grid[data-toolbar-align="top"] {
+                left: 50%;
+                bottom: 0;
+                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px))) scale(var(--forge-menu-animation-from-scale, 0.95));
+            }
+        `;
+        shadow.appendChild(style);
         shadow.appendChild(this.rootElement);
     }
 }
@@ -77,82 +163,9 @@ class ToolbarMenu extends HTMLElement {
 
         const style = document.createElement("style");
         style.innerHTML = `
-             div.menu-grid {
-                position: absolute;
-                visibility: hidden;
-                opacity: 0;
-                background: white;
-                padding: 12px;
-                border-radius: 8px;
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-                z-index: 1000;
-                transition: opacity 0.2s ease-out, transform 0.2s ease-out;
-                pointer-events: none;
-            }
-            
             div.menu-container {
                 position: relative;
                 display: inline-block;
-            }
-            
-            div.menu-grid[data-open] {
-                visibility: visible;
-                opacity: 1;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                pointer-events: auto;
-            }
-
-            .menu-container[data-toolbar-align="left"] div.menu-grid[data-open] {
-                transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%) scale(1);
-            }
-
-            .menu-container[data-toolbar-align="right"] div.menu-grid[data-open] {
-                transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%) scale(1);
-            }
-
-            .menu-container[data-toolbar-align="bottom"] div.menu-grid[data-open] {
-                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px))) scale(1);
-            }
-
-            .menu-container[data-toolbar-align="top"] div.menu-grid[data-open] {
-                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px))) scale(1);
-            }
-
-            div.menu-grid-row {
-                display: flex;
-                gap: 8px;
-            }
-            
-            div.menu-grid-divider {
-                width: 100%;
-                height: 1px;
-                background-color: #e0e0e0;
-                margin: 4px 0;
-            }
-            
-            .menu-container[data-toolbar-align="right"] div.menu-grid {
-                left: 0;
-                top: 50%;
-                transform: translate(calc(-100% - var(--forge-menu-pop-gap, 12px)), -50%) scale(var(--forge-menu-animation-from-scale, 0.95));
-            }
-            .menu-container[data-toolbar-align="left"] div.menu-grid {
-                right: 0;
-                top: 50%;
-                transform: translate(calc(100% + var(--forge-menu-pop-gap, 12px)), -50%) scale(var(--forge-menu-animation-from-scale, 0.95));
-            }
-
-            .menu-container[data-toolbar-align="bottom"] div.menu-grid {
-                left: 50%;
-                top: 0;
-                transform: translate(-50%, calc(-100% - var(--forge-menu-pop-gap, 12px))) scale(var(--forge-menu-animation-from-scale, 0.95));
-            }
-
-            .menu-container[data-toolbar-align="top"] div.menu-grid {
-                left: 50%;
-                bottom: 0;
-                transform: translate(-50%, calc(100% + var(--forge-menu-pop-gap, 12px))) scale(var(--forge-menu-animation-from-scale, 0.95));
             }
         `;
 
@@ -162,6 +175,8 @@ class ToolbarMenu extends HTMLElement {
         iconSlot.setAttribute("name", "icon");
         iconContainer.appendChild(iconSlot);
         this.rootElement.appendChild(iconContainer);
+
+        this.rootElement.appendChild(document.createElement("slot"));
 
         const shadow = this.attachShadow({ mode: 'closed' });
         shadow.appendChild(style);
@@ -231,7 +246,7 @@ class ToolbarMenu extends HTMLElement {
 
     public updateToolbarAlign(align: string) {
         this.rootElement.setAttribute("data-toolbar-align", align);
-
+        this.menuGrid?.rootElement.setAttribute("data-toolbar-align", align);
     }
 
     private handleChildrenUpdate() {

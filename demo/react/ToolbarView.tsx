@@ -1,5 +1,5 @@
 import '@netless/forge-web-ui';
-import {MouseEvent, useCallback} from "react";
+import {MouseEvent, useCallback, useState} from "react";
 
 const paletteColors = [
     ['#E2E2E2', '#A1C473', '#FFC908', '#CC3100'],
@@ -9,9 +9,14 @@ const paletteColors = [
 
 export function ToolbarView() {
 
+    const [preferenceColors, setPreferenceColors] = useState<string[]>([]);
+
     const addPreferenceColor = useCallback((color: string) => {
-        console.log("addPreferenceColor ", color);
-    }, []);
+        if (preferenceColors.indexOf(color) < 0) {
+            const nextPreferenceColors = preferenceColors.concat([color]).slice(-2);
+            setPreferenceColors(nextPreferenceColors);
+        }
+    }, [preferenceColors]);
 
     return (
         <forge-toolbar align="right" id="forge-toolbar" direction="vertical">
@@ -184,7 +189,7 @@ export function ToolbarView() {
             </forge-toolbar-asset>
             <forge-toolbar-asset name="palette">
                 <svg width="28" height="28" viewBox="-5 -5 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clip-path="url(#paint0_angular_97714_9104_clip_path)" data-figma-skip-parse="true">
+                    <g clipPath="url(#paint0_angular_97714_9104_clip_path)" data-figma-skip-parse="true">
                         <g transform="matrix(0 0.009 -0.009 0 9 9)">
                             <foreignObject x="-1055.56" y="-1055.56" width="2111.11" height="2111.11">
                                 <div style={{
@@ -378,6 +383,9 @@ export function ToolbarView() {
                     </forge-toolbar-grid-row>
                 </forge-toolbar-grid>
             </forge-toolbar-menu>
+            {preferenceColors.map(color => {
+                return <forge-toolbar-icon icon="palette-icon" key={color} theme={color}></forge-toolbar-icon>
+            })}
             <forge-toolbar-menu display-icon="palette">
                 <forge-toolbar-icon icon="palette"></forge-toolbar-icon>
                 <forge-toolbar-grid>
@@ -390,9 +398,8 @@ export function ToolbarView() {
                                     icon="palette-icon"
                                     theme={color}
                                     onContextMenu={(evt: MouseEvent) => {
-                                        console.log("right click color", color);
                                         evt.preventDefault();
-                                        addPreferenceColor(color)
+                                        addPreferenceColor(color);
                                     }}
                                     disable-active-background
                                 />

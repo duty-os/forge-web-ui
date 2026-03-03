@@ -132,7 +132,7 @@ class ToolbarIcon extends HTMLElement {
             if (this.isActive) {
                 if (active) {
                     this.rootElement.replaceChildren();
-                    this.rootElement.appendChild(active.rootElement);
+                    this.rootElement.appendChild(active.children[0].cloneNode(true));
                 } else {
                     console.warn(`[ForgeToolbar] Active asset not found for icon: ${assetName}`);
                 }
@@ -140,7 +140,7 @@ class ToolbarIcon extends HTMLElement {
             } else {
                 if (regular) {
                     this.rootElement.replaceChildren();
-                    this.rootElement.appendChild(regular.rootElement);
+                    this.rootElement.appendChild(regular.children[0].cloneNode(true));
                 } else {
                     console.warn(`[ForgeToolbar] Regular asset not found for icon: ${assetName}`);
                 }

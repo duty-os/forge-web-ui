@@ -19,6 +19,10 @@ class DragHandle extends HTMLElement {
     constructor() {
         super();
         this.rootElement = document.createElement('div');
+
+        const shadow = this.attachShadow({ mode: 'closed' });
+        this.rootElement.appendChild(document.createElement("slot"));
+        shadow.appendChild(this.rootElement);
     }
 
     connectedCallback() {
@@ -50,10 +54,7 @@ class DragHandle extends HTMLElement {
         }
     }
 
-    private handlePointerEnd = (event: PointerEvent) => {
-        const offsetX = event.clientX - this.initialX;
-        const offsetY = event.clientY - this.initialY;
-
+    private handlePointerEnd = () => {
         // Stop listening to move and end events globally
         document.removeEventListener('pointermove', this.handlePointerMove);
         document.removeEventListener('pointerup', this.handlePointerEnd);
@@ -108,8 +109,6 @@ class DragHandle extends HTMLElement {
                     newAlign = 'bottom';
                     shouldSnap = true;
                 }
-
-                console.log(offsetX, offsetY);
 
                 if (shouldSnap && newAlign) {
                     // Update align attribute
